@@ -1,9 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/ibrahim/Documents/GitHub/luna/app/homepage/page.js"],"sourcesContent":["import React from 'react';\n\nexport default function Homepage() {\n  return <div>Homepage</div>;\n}\n"],"names":[],"mappings":";;;;AAAA;;;AAEe,SAAS;IACtB,qBAAO,6LAAC;kBAAI;;;;;;AACd;KAFwB"}},
-    {"offset": {"line": 29, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
-    {"offset": {"line": 35, "column": 0}, "map": {"version":3,"sources":["file:///Users/ibrahim/Documents/GitHub/luna/app/page.js"],"sourcesContent":["'use client';\nimport Homepage from './homepage/page';\n\nexport default function Home() {\n  return <Homepage />;\n}\n"],"names":[],"mappings":";;;;AACA;AADA;;;AAGe,SAAS;IACtB,qBAAO,6LAAC,0HAAA,CAAA,UAAQ;;;;;AAClB;KAFwB"}},
-    {"offset": {"line": 56, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}
