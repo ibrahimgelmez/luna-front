@@ -306,213 +306,154 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$dayjs$2f$day
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$dayjs$2f$locale$2f$tr$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/dayjs/locale/tr.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/app/components/NewSideBar/page.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/context/AuthContext.js [app-ssr] (ecmascript)");
-'use client';
+"use client";
 ;
 ;
 ;
 ;
 ;
 ;
-__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$dayjs$2f$dayjs$2e$min$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].locale('tr');
+__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$dayjs$2f$dayjs$2e$min$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].locale("tr");
 function Home() {
     const [selectedDate, setSelectedDate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [notes, setNotes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({});
-    const [currentWeek, setCurrentWeek] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$dayjs$2f$dayjs$2e$min$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])().startOf('week').add(1, 'day'));
-    const [noteInput, setNoteInput] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
-    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [currentMonth, setCurrentMonth] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$dayjs$2f$dayjs$2e$min$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])().startOf("month"));
+    const [noteInput, setNoteInput] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const { bearerKey } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
     const weekDays = [
-        'Pzt',
-        'Sal',
-        'Çar',
-        'Per',
-        'Cum',
-        'Cmt',
-        'Pzr'
+        "Pzt",
+        "Sal",
+        "Çar",
+        "Per",
+        "Cum",
+        "Cmt",
+        "Pzr"
     ];
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        // Yerel depolamadan notları yükle
-        const storedNotes = JSON.parse(localStorage.getItem('notes')) || {};
-        setNotes(storedNotes);
-        // API'den takvim verilerini çek
-        const fetchCalendars = async ()=>{
+        const fetchNotes = async ()=>{
             try {
-                const response = await fetch('http://217.195.207.244:8081/calendars', {
-                    method: 'GET',
+                const response = await fetch("http://217.195.207.244:8081/calendars", {
+                    method: "GET",
                     headers: {
                         Authorization: `Bearer ${bearerKey}`,
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json"
                     }
                 });
-                if (!response.ok) throw new Error('Takvim verileri alınamadı');
+                if (!response.ok) throw new Error("Notlar alınamadı");
                 const data = await response.json();
-                const apiNotes = data._embedded.calendars.reduce((acc, item)=>{
-                    const date = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$dayjs$2f$dayjs$2e$min$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])(item.date).format('YYYY-MM-DD');
-                    acc[date] = acc[date] ? [
-                        ...acc[date],
-                        {
-                            id: item.id,
-                            todo: item.todo,
-                            date: item.date,
-                            checked: item.checked
-                        }
-                    ] : [
-                        {
-                            id: item.id,
-                            todo: item.todo,
-                            date: item.date,
-                            checked: item.checked
-                        }
-                    ];
-                    return acc;
-                }, {});
-                // Yerel notlarla API notlarını birleştir
-                setNotes((prev)=>({
-                        ...prev,
-                        ...apiNotes
-                    }));
+                const notesByDate = {};
+                data._embedded.calendars.forEach((note)=>{
+                    if (!notesByDate[note.date]) notesByDate[note.date] = [];
+                    notesByDate[note.date].push({
+                        id: note.id,
+                        todo: note.todo
+                    });
+                });
+                setNotes(notesByDate);
             } catch (error) {
-                setError('Takvim verileri alınırken hata oluştu: ' + error.message);
-                console.error("API'den takvim verileri alınırken hata oluştu:", error);
+                console.error("Notlar alınırken hata oluştu:", error);
             }
         };
-        if (bearerKey) fetchCalendars();
+        if (bearerKey) fetchNotes();
     }, [
         bearerKey
     ]);
     const saveNote = async ()=>{
-        if (selectedDate && noteInput.trim() !== '') {
-            // Yerel depolamaya kaydet (ID olmadan geçici olarak)
-            const newNote = {
-                todo: noteInput,
-                date: selectedDate,
-                checked: false
-            };
-            const updatedNotes = {
-                ...notes,
-                [selectedDate]: Array.isArray(notes[selectedDate]) ? [
-                    ...notes[selectedDate],
-                    newNote
-                ] : [
-                    newNote
-                ]
-            };
-            setNotes(updatedNotes);
-            localStorage.setItem('notes', JSON.stringify(updatedNotes));
-            // API'ye kaydet
+        if (selectedDate && noteInput.trim() !== "") {
             try {
-                const response = await fetch('http://217.195.207.244:8081/calendars', {
-                    method: 'POST',
+                const response = await fetch("http://217.195.207.244:8081/calendars", {
+                    method: "POST",
                     headers: {
                         Authorization: `Bearer ${bearerKey}`,
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        todo: noteInput,
                         date: selectedDate,
+                        userId: "ibrahim",
+                        todo: noteInput,
                         checked: false
                     })
                 });
-                if (!response.ok) throw new Error("Not API'ye eklenemedi");
-                const savedNote = await response.json();
-                // API'den dönen ID ile yerel notu güncelle
-                updatedNotes[selectedDate] = updatedNotes[selectedDate].map((note)=>note.todo === noteInput && note.date === selectedDate && !note.id ? {
-                        ...note,
-                        id: savedNote.id
-                    } : note);
+                if (!response.ok) throw new Error("Not eklenemedi");
+                const newNote = await response.json();
+                const updatedNotes = {
+                    ...notes,
+                    [selectedDate]: notes[selectedDate] ? [
+                        ...notes[selectedDate],
+                        {
+                            id: newNote.id,
+                            todo: noteInput
+                        }
+                    ] : [
+                        {
+                            id: newNote.id,
+                            todo: noteInput
+                        }
+                    ]
+                };
                 setNotes(updatedNotes);
-                localStorage.setItem('notes', JSON.stringify(updatedNotes));
-                console.log("Not API'ye başarıyla eklendi");
+                setNoteInput("");
             } catch (error) {
-                setError('Not eklenirken hata oluştu: ' + error.message);
-                console.error("Not API'ye eklenirken hata oluştu:", error);
+                console.error("Not eklenirken hata oluştu:", error);
             }
-            setNoteInput('');
         }
     };
     const deleteNote = async (index)=>{
-        if (selectedDate && Array.isArray(notes[selectedDate]) && notes[selectedDate][index]) {
-            const noteToDelete = notes[selectedDate][index];
-            const updatedNotes = {
-                ...notes
-            };
-            updatedNotes[selectedDate].splice(index, 1);
-            if (updatedNotes[selectedDate].length === 0) delete updatedNotes[selectedDate];
-            setNotes(updatedNotes);
-            localStorage.setItem('notes', JSON.stringify(updatedNotes));
-            // API'den silme
-            if (noteToDelete.id) {
-                try {
-                    const response = await fetch(`http://217.195.207.244:8081/calendars/${noteToDelete.id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            Authorization: `Bearer ${bearerKey}`
-                        }
-                    });
-                    if (!response.ok) throw new Error("Not API'den silinemedi");
-                    console.log("Not API'den başarıyla silindi");
-                } catch (error) {
-                    setError('Not silinirken hata oluştu: ' + error.message);
-                    console.error("Not API'den silinirken hata oluştu:", error);
-                    // Hata durumunda yerel notu geri ekle
-                    updatedNotes[selectedDate] = updatedNotes[selectedDate] ? [
-                        ...updatedNotes[selectedDate],
-                        noteToDelete
-                    ] : [
-                        noteToDelete
-                    ];
-                    setNotes(updatedNotes);
-                    localStorage.setItem('notes', JSON.stringify(updatedNotes));
-                }
+        if (selectedDate && notes[selectedDate] && notes[selectedDate][index]) {
+            const noteId = notes[selectedDate][index].id;
+            try {
+                const response = await fetch(`http://217.195.207.244:8081/calendars/${noteId}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${bearerKey}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (!response.ok) throw new Error("Not silinirken hata oluştu");
+                const updatedNotes = {
+                    ...notes
+                };
+                updatedNotes[selectedDate].splice(index, 1);
+                if (updatedNotes[selectedDate].length === 0) delete updatedNotes[selectedDate];
+                setNotes(updatedNotes);
+            } catch (error) {
+                console.error("Not silinirken hata oluştu:", error);
             }
         }
     };
-    const changeWeek = (direction)=>{
-        setCurrentWeek(currentWeek.add(direction * 2, 'week'));
+    const changeMonth = (direction)=>{
+        setCurrentMonth(currentMonth.add(direction, "month"));
         setSelectedDate(null);
-        setNoteInput('');
+        setNoteInput("");
     };
+    const daysInMonth = currentMonth.daysInMonth();
+    const firstDayOfMonth = currentMonth.startOf("month").day() || 7;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "flex h-screen w-screen bg-gray-100",
+        className: "flex",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "w-[5%] h-full",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
-                    fileName: "[project]/app/takvim/page.js",
-                    lineNumber: 171,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/takvim/page.js",
-                lineNumber: 170,
+                lineNumber: 110,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex-1 p-4 gap-4 flex overflow-auto",
+                className: "flex h-screen w-screen bg-gray-100 p-2 pt-20",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "w-1/4 p-4 bg-white shadow-lg rounded-lg h-auto overflow-auto",
+                        className: "w-1/3 p-4 bg-[#6666ff] shadow-lg rounded-lg h-full overflow-auto",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                className: "text-xl font-bold text-black mb-4",
+                                className: "text-2xl font-bold text-black mb-3 mt-4",
                                 children: "Notlar"
                             }, void 0, false, {
                                 fileName: "[project]/app/takvim/page.js",
-                                lineNumber: 178,
+                                lineNumber: 113,
                                 columnNumber: 11
-                            }, this),
-                            error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "mb-4 p-2 bg-red-100 text-red-700 rounded",
-                                children: error
-                            }, void 0, false, {
-                                fileName: "[project]/app/takvim/page.js",
-                                lineNumber: 180,
-                                columnNumber: 13
                             }, this),
                             selectedDate ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                        className: "text-lg font-bold mb-2 text-black",
+                                        className: "text-lg font-bold mb-2",
                                         children: [
                                             "Not Ekle (",
                                             selectedDate,
@@ -520,211 +461,225 @@ function Home() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/takvim/page.js",
-                                        lineNumber: 186,
+                                        lineNumber: 116,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                                        className: "w-full p-2 border rounded-lg text-sm text-black placeholder-gray-500",
+                                        className: "w-full p-2 border rounded-lg text-base",
                                         placeholder: "Bugün için bir not ekle...",
                                         value: noteInput,
                                         onChange: (e)=>setNoteInput(e.target.value)
                                     }, void 0, false, {
                                         fileName: "[project]/app/takvim/page.js",
-                                        lineNumber: 189,
+                                        lineNumber: 117,
                                         columnNumber: 15
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: saveNote,
-                                        className: "w-full mt-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500",
-                                        children: "Kaydet"
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex gap-3 mt-3",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: saveNote,
+                                            className: "px-4 py-1 bg-green-600 text-white rounded-lg hover:bg-green-500 text-sm",
+                                            children: "Kaydet ✅"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/takvim/page.js",
+                                            lineNumber: 124,
+                                            columnNumber: 17
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/takvim/page.js",
-                                        lineNumber: 195,
+                                        lineNumber: 123,
                                         columnNumber: 15
                                     }, this),
                                     Array.isArray(notes[selectedDate]) && notes[selectedDate].length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "mt-4 bg-gray-200 p-2 rounded-lg shadow",
+                                        className: "mt-3 w-full bg-gray-200 p-3 rounded-lg shadow",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                className: "text-sm font-bold mb-2 text-black",
+                                                className: "text-lg font-bold mb-2 text-black",
                                                 children: "Kaydedilen Notlar"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/takvim/page.js",
-                                                lineNumber: 205,
-                                                columnNumber: 21
+                                                lineNumber: 133,
+                                                columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                                                 children: notes[selectedDate].map((note, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                                        className: "flex justify-between Commodities-center border-b py-1 text-xs",
+                                                        className: "flex justify-between items-center border-b py-1",
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "text-black",
+                                                                className: "text-black text-sm",
                                                                 children: note.todo
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/takvim/page.js",
-                                                                lineNumber: 214,
-                                                                columnNumber: 27
+                                                                lineNumber: 137,
+                                                                columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                                 onClick: ()=>deleteNote(index),
-                                                                className: "px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-400",
+                                                                className: "px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-400 text-xs",
                                                                 children: "Sil ❌"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/takvim/page.js",
-                                                                lineNumber: 215,
-                                                                columnNumber: 27
+                                                                lineNumber: 138,
+                                                                columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, index, true, {
                                                         fileName: "[project]/app/takvim/page.js",
-                                                        lineNumber: 210,
-                                                        columnNumber: 25
+                                                        lineNumber: 136,
+                                                        columnNumber: 23
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/takvim/page.js",
-                                                lineNumber: 208,
-                                                columnNumber: 21
+                                                lineNumber: 134,
+                                                columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/takvim/page.js",
-                                        lineNumber: 204,
-                                        columnNumber: 19
+                                        lineNumber: 132,
+                                        columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-sm text-black",
+                                className: "text-black text-sm",
                                 children: "Bir gün seçerek not ekleyebilirsin. 📌"
                             }, void 0, false, {
                                 fileName: "[project]/app/takvim/page.js",
-                                lineNumber: 228,
+                                lineNumber: 151,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/takvim/page.js",
-                        lineNumber: 177,
+                        lineNumber: 112,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex flex-col items-center justify-center w-3/4",
+                        className: "flex flex-col items-center justify-start w-2/3 p-2 pt-12",
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                className: "text-3xl font-bold text-black",
-                                children: "Takvim"
-                            }, void 0, false, {
-                                fileName: "[project]/app/takvim/page.js",
-                                lineNumber: 236,
-                                columnNumber: 11
-                            }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex items-center justify-between w-full max-w-3xl mb-4",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: ()=>changeWeek(-1),
-                                        className: "px-3 py-2 bg-[#0000cd] text-white rounded-lg hover:bg-gray-700 text-sm",
-                                        children: "⬅️ Önceki 2 Hafta"
+                                        onClick: ()=>changeMonth(-1),
+                                        className: "px-3 py-1 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm",
+                                        children: "Önceki Ay"
                                     }, void 0, false, {
                                         fileName: "[project]/app/takvim/page.js",
-                                        lineNumber: 238,
+                                        lineNumber: 156,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                        className: "text-lg font-bold text-black",
-                                        children: [
-                                            currentWeek.format('DD MMMM YYYY'),
-                                            " -",
-                                            ' ',
-                                            currentWeek.add(13, 'day').format('DD MMMM YYYY')
-                                        ]
-                                    }, void 0, true, {
+                                        className: "text-xl font-bold text-black",
+                                        children: currentMonth.format("MMMM YYYY")
+                                    }, void 0, false, {
                                         fileName: "[project]/app/takvim/page.js",
-                                        lineNumber: 244,
+                                        lineNumber: 162,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: ()=>changeWeek(1),
-                                        className: "px-3 py-2 bg-[#0000cd] text-white rounded-lg hover:bg-gray-700 text-sm",
-                                        children: "Sonraki 2 Hafta ➡️"
+                                        onClick: ()=>changeMonth(1),
+                                        className: "px-3 py-1 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm",
+                                        children: "Sonraki Ay"
                                     }, void 0, false, {
                                         fileName: "[project]/app/takvim/page.js",
-                                        lineNumber: 248,
+                                        lineNumber: 163,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/takvim/page.js",
-                                lineNumber: 237,
+                                lineNumber: 155,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "grid grid-cols-7 gap-2 w-full max-w-4xl",
-                                children: Array.from({
-                                    length: 14
-                                }).map((_, i)=>{
-                                    const date = currentWeek.add(i, 'day').format('YYYY-MM-DD');
-                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: `border w-[100px] h-[150px] flex flex-col items-center justify-center cursor-pointer rounded-lg text-sm font-semibold transition-all duration-200 ${selectedDate === date ? 'bg-[#0000cd] text-white scale-105' : 'bg-[#0000cd] text-white'}`,
-                                        onClick: ()=>{
-                                            setSelectedDate(date);
-                                            setNoteInput('');
-                                        },
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "uppercase",
-                                                children: weekDays[i % 7]
-                                            }, void 0, false, {
-                                                fileName: "[project]/app/takvim/page.js",
-                                                lineNumber: 273,
-                                                columnNumber: 19
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "text-lg font-bold",
-                                                children: currentWeek.add(i, 'day').format('DD')
-                                            }, void 0, false, {
-                                                fileName: "[project]/app/takvim/page.js",
-                                                lineNumber: 274,
-                                                columnNumber: 19
-                                            }, this),
-                                            Array.isArray(notes[date]) && notes[date].length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "text-xs bg-white text-black p-1 mt-1 rounded-lg",
-                                                children: [
-                                                    notes[date].length,
-                                                    " not var 📌"
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/app/takvim/page.js",
-                                                lineNumber: 278,
-                                                columnNumber: 21
-                                            }, this)
-                                        ]
-                                    }, date, true, {
+                                className: "grid grid-cols-7 gap-1 w-full max-w-3xl mb-1",
+                                children: weekDays.map((day)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "text-center text-sm font-bold text-black",
+                                        children: day
+                                    }, day, false, {
                                         fileName: "[project]/app/takvim/page.js",
-                                        lineNumber: 261,
-                                        columnNumber: 17
-                                    }, this);
-                                })
+                                        lineNumber: 172,
+                                        columnNumber: 15
+                                    }, this))
                             }, void 0, false, {
                                 fileName: "[project]/app/takvim/page.js",
-                                lineNumber: 257,
+                                lineNumber: 170,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "grid grid-cols-7 gap-1 w-full max-w-3xl",
+                                children: [
+                                    Array.from({
+                                        length: firstDayOfMonth - 1
+                                    }).map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "border w-full h-[80px]"
+                                        }, `empty-${i}`, false, {
+                                            fileName: "[project]/app/takvim/page.js",
+                                            lineNumber: 179,
+                                            columnNumber: 15
+                                        }, this)),
+                                    Array.from({
+                                        length: daysInMonth
+                                    }).map((_, i)=>{
+                                        const date = currentMonth.date(i + 1).format("YYYY-MM-DD");
+                                        const dayOfWeek = currentMonth.date(i + 1).day();
+                                        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: `border w-full h-[80px] flex flex-col items-center justify-center cursor-pointer rounded-lg text-sm font-semibold transition-all duration-200 ${selectedDate === date ? "bg-blue-500 text-white scale-105" : isWeekend ? "bg-red-600 text-white" : "bg-[#6666ff] text-white"}`,
+                                            onClick: ()=>{
+                                                setSelectedDate(date);
+                                                setNoteInput("");
+                                            },
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "text-base font-bold",
+                                                    children: i + 1
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/takvim/page.js",
+                                                    lineNumber: 201,
+                                                    columnNumber: 19
+                                                }, this),
+                                                Array.isArray(notes[date]) && notes[date].length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "text-xs bg-white text-black p-1 mt-1 rounded-lg overflow-hidden max-h-[30px] w-[90%] text-center",
+                                                    children: [
+                                                        notes[date].length,
+                                                        " not 📌"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/app/takvim/page.js",
+                                                    lineNumber: 203,
+                                                    columnNumber: 21
+                                                }, this)
+                                            ]
+                                        }, date, true, {
+                                            fileName: "[project]/app/takvim/page.js",
+                                            lineNumber: 187,
+                                            columnNumber: 17
+                                        }, this);
+                                    })
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/takvim/page.js",
+                                lineNumber: 177,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/takvim/page.js",
-                        lineNumber: 235,
+                        lineNumber: 154,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/takvim/page.js",
-                lineNumber: 175,
+                lineNumber: 111,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/takvim/page.js",
-        lineNumber: 168,
+        lineNumber: 109,
         columnNumber: 5
     }, this);
 }

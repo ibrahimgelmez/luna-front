@@ -321,9 +321,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/app/components/NewSideBar/page.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/context/AuthContext.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-hot-toast/dist/index.mjs [app-client] (ecmascript)");
 ;
 var _s = __turbopack_refresh__.signature();
 'use client';
+;
 ;
 ;
 ;
@@ -357,21 +359,21 @@ function AddProject() {
         e.preventDefault();
         setError(null);
         setSuccess(null);
-        // Takım üyelerini virgülle ayrılmış string'den diziye çevirme
-        const teamArray = formData.team.split(',').map((member)=>member.trim());
-        // JSON formatına uygun hale getirme
+        const teamArray = formData.team ? formData.team.split(',').map((member)=>member.trim()) : [];
         const projectData = {
             projectName: formData.projectName,
+            stbCode: formData.stbCode,
             projectSummary: formData.summary,
             projectType: formData.type,
             projectPurpose: formData.purpose,
             projectSector: formData.sector,
             projectStatus: 'Devam Ediyor',
             projectTeam: teamArray,
-            projectBudget: parseInt(formData.budget),
+            projectBudget: formData.budget ? parseInt(formData.budget) : 0,
             projectStartDate: formData.startDate,
             projectEndDate: formData.endDate
         };
+        console.log('Gönderilen Veri:', JSON.stringify(projectData));
         try {
             const response = await fetch('http://217.195.207.244:8081/projects', {
                 method: 'POST',
@@ -382,12 +384,13 @@ function AddProject() {
                 body: JSON.stringify(projectData)
             });
             if (!response.ok) {
-                throw new Error('Proje eklenirken hata oluştu');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Proje eklenirken hata oluştu');
             }
             const result = await response.json();
             setSuccess('Proje başarıyla eklendi!');
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].success('Proje başarıyla eklendi!');
             console.log('Proje Eklendi:', result);
-            // Başarılı eklemeden sonra formu sıfırla
             setFormData({
                 projectName: '',
                 stbCode: '',
@@ -400,21 +403,29 @@ function AddProject() {
                 startDate: '',
                 endDate: ''
             });
-            // Opsiyonel: Kullanıcıyı projeler sayfasına yönlendirebilirsiniz
             setTimeout(()=>{
                 router.push('/projects');
-            }, 2000);
+            }, 3000);
         } catch (err) {
             setError(err.message);
-            console.error('Hata:', err);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].error('Proje eklenirken bir hata oluştu: ' + err.message);
+            console.error('Hata Detayı:', err);
         }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-6 pt-16 px-32 mx-auto bg-white",
         children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Toaster"], {
+                position: "top-right",
+                reverseOrder: false
+            }, void 0, false, {
+                fileName: "[project]/app/add-project/page.js",
+                lineNumber: 100,
+                columnNumber: 7
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/add-project/page.js",
-                lineNumber: 97,
+                lineNumber: 101,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -425,7 +436,7 @@ function AddProject() {
                         children: "Proje Ekle"
                     }, void 0, false, {
                         fileName: "[project]/app/add-project/page.js",
-                        lineNumber: 99,
+                        lineNumber: 103,
                         columnNumber: 9
                     }, this),
                     error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -434,14 +445,14 @@ function AddProject() {
                     }, void 0, false, {
                         fileName: "[project]/app/add-project/page.js",
                         lineNumber: 105,
-                        columnNumber: 11
+                        columnNumber: 19
                     }, this),
                     success && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "mb-4 p-3 bg-green-100 text-green-700 rounded",
                         children: success
                     }, void 0, false, {
                         fileName: "[project]/app/add-project/page.js",
-                        lineNumber: 110,
+                        lineNumber: 107,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -456,7 +467,7 @@ function AddProject() {
                                         children: "Proje Adı"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 121,
+                                        lineNumber: 113,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -469,13 +480,13 @@ function AddProject() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 127,
+                                        lineNumber: 116,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 120,
+                                lineNumber: 112,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -486,7 +497,7 @@ function AddProject() {
                                         children: "STB Kodu"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 140,
+                                        lineNumber: 129,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -499,13 +510,13 @@ function AddProject() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 146,
+                                        lineNumber: 132,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 139,
+                                lineNumber: 128,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -516,7 +527,7 @@ function AddProject() {
                                         children: "Proje Özeti"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 159,
+                                        lineNumber: 145,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -529,13 +540,13 @@ function AddProject() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 165,
+                                        lineNumber: 148,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 158,
+                                lineNumber: 144,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -546,7 +557,7 @@ function AddProject() {
                                         children: "Proje Amacı"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 178,
+                                        lineNumber: 161,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -559,13 +570,13 @@ function AddProject() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 184,
+                                        lineNumber: 164,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 177,
+                                lineNumber: 160,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -576,7 +587,7 @@ function AddProject() {
                                         children: "Proje Türü"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 197,
+                                        lineNumber: 177,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -592,7 +603,7 @@ function AddProject() {
                                                 children: "Seçiniz"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 211,
+                                                lineNumber: 188,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -600,7 +611,7 @@ function AddProject() {
                                                 children: "Ar-Ge"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 212,
+                                                lineNumber: 189,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -608,7 +619,7 @@ function AddProject() {
                                                 children: "TÜBİTAK"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 213,
+                                                lineNumber: 190,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -616,7 +627,7 @@ function AddProject() {
                                                 children: "KOSGEB"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 214,
+                                                lineNumber: 191,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -624,7 +635,7 @@ function AddProject() {
                                                 children: "TEKNOPARK"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 215,
+                                                lineNumber: 192,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -632,19 +643,19 @@ function AddProject() {
                                                 children: "Diğer"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 216,
+                                                lineNumber: 193,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 203,
+                                        lineNumber: 180,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 196,
+                                lineNumber: 176,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -655,7 +666,7 @@ function AddProject() {
                                         children: "Sektör"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 222,
+                                        lineNumber: 199,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -671,7 +682,7 @@ function AddProject() {
                                                 children: "Seçiniz"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 236,
+                                                lineNumber: 210,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -679,7 +690,7 @@ function AddProject() {
                                                 children: "Teknoloji"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 237,
+                                                lineNumber: 211,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -687,7 +698,7 @@ function AddProject() {
                                                 children: "Eğitim"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 238,
+                                                lineNumber: 212,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -695,7 +706,7 @@ function AddProject() {
                                                 children: "Sağlık"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 239,
+                                                lineNumber: 213,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -703,7 +714,7 @@ function AddProject() {
                                                 children: "Finans"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 240,
+                                                lineNumber: 214,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -711,7 +722,15 @@ function AddProject() {
                                                 children: "E-Ticaret"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 241,
+                                                lineNumber: 215,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: "Pazarlama ve Reklamcılık",
+                                                children: "Pazarlama ve Reklamcılık"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/add-project/page.js",
+                                                lineNumber: 216,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -719,7 +738,7 @@ function AddProject() {
                                                 children: "Medya"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 242,
+                                                lineNumber: 217,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -727,19 +746,19 @@ function AddProject() {
                                                 children: "Diğer"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/add-project/page.js",
-                                                lineNumber: 243,
+                                                lineNumber: 218,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 228,
+                                        lineNumber: 202,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 221,
+                                lineNumber: 198,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -750,7 +769,7 @@ function AddProject() {
                                         children: "Bütçe (TL)"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 249,
+                                        lineNumber: 224,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -764,13 +783,13 @@ function AddProject() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 255,
+                                        lineNumber: 227,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 248,
+                                lineNumber: 223,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -781,7 +800,7 @@ function AddProject() {
                                         children: "Proje Ekibi (Virgülle ayırın)"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 269,
+                                        lineNumber: 241,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -795,13 +814,13 @@ function AddProject() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 275,
+                                        lineNumber: 244,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 268,
+                                lineNumber: 240,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -812,7 +831,7 @@ function AddProject() {
                                         children: "Başlangıç Tarihi"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 289,
+                                        lineNumber: 258,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -825,13 +844,13 @@ function AddProject() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 295,
+                                        lineNumber: 261,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 288,
+                                lineNumber: 257,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -842,7 +861,7 @@ function AddProject() {
                                         children: "Bitiş Tarihi"
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 308,
+                                        lineNumber: 274,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -855,40 +874,40 @@ function AddProject() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/add-project/page.js",
-                                        lineNumber: 314,
+                                        lineNumber: 277,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 307,
+                                lineNumber: 273,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "submit",
-                                className: "w-full bg-[#0000cd] text-white p-3 rounded hover:bg-[#0000cd] transition-colors",
+                                className: "w-full bg-[#6666ff] text-white p-3 rounded hover:bg-[#0000cd] transition-colors",
                                 children: "Projeyi Kaydet"
                             }, void 0, false, {
                                 fileName: "[project]/app/add-project/page.js",
-                                lineNumber: 326,
+                                lineNumber: 289,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/add-project/page.js",
-                        lineNumber: 115,
+                        lineNumber: 110,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/add-project/page.js",
-                lineNumber: 98,
+                lineNumber: 102,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/add-project/page.js",
-        lineNumber: 96,
+        lineNumber: 99,
         columnNumber: 5
     }, this);
 }

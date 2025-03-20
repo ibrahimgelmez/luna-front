@@ -305,13 +305,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/app/components/NewSideBar/page.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/context/AuthContext.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-icons/fa/index.mjs [app-ssr] (ecmascript)");
-'use client';
+"use client";
 ;
 ;
 ;
 ;
 ;
-const Card = ({ title, projects, todos, onToggleTodo })=>{
+const Card = ({ title, projects, todos, onDeleteTodo })=>{
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "bg-white h-[300px] p-5 rounded shadow overflow-auto",
         children: [
@@ -336,21 +336,22 @@ const Card = ({ title, projects, todos, onToggleTodo })=>{
                     lineNumber: 13,
                     columnNumber: 11
                 }, this)),
-            todos && todos.map((todo, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center mb-2",
+            todos && todos.length > 0 ? todos.map((todo, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex items-center mb-2 cursor-pointer",
+                    onClick: ()=>onDeleteTodo(index, todo.id),
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                             type: "checkbox",
                             checked: todo.checked,
-                            onChange: ()=>onToggleTodo(index, todo.id),
-                            className: "mr-2 h-4 w-4 text-[#0000cd] border-gray-300 rounded focus:ring-[#0000cd]"
+                            readOnly: true,
+                            className: "mr-2 h-4 w-4 text-[#6666ff] border-gray-300 rounded"
                         }, void 0, false, {
                             fileName: "[project]/app/homepage/page.js",
-                            lineNumber: 24,
+                            lineNumber: 28,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            className: `text-black ${todo.checked ? 'line-through text-gray-500' : ''}`,
+                            className: `text-black ${todo.checked ? "line-through text-gray-500" : ""}`,
                             children: [
                                 todo.todo,
                                 " - ",
@@ -358,7 +359,7 @@ const Card = ({ title, projects, todos, onToggleTodo })=>{
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/homepage/page.js",
-                            lineNumber: 30,
+                            lineNumber: 34,
                             columnNumber: 13
                         }, this)
                     ]
@@ -366,7 +367,14 @@ const Card = ({ title, projects, todos, onToggleTodo })=>{
                     fileName: "[project]/app/homepage/page.js",
                     lineNumber: 23,
                     columnNumber: 11
-                }, this))
+                }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-gray-500",
+                children: "Bugüne ait todo bulunamadı."
+            }, void 0, false, {
+                fileName: "[project]/app/homepage/page.js",
+                lineNumber: 40,
+                columnNumber: 9
+            }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/homepage/page.js",
@@ -377,85 +385,79 @@ const Card = ({ title, projects, todos, onToggleTodo })=>{
 const Homepage = ()=>{
     const [todos, setTodos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [projects, setProjects] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const { bearerKey, user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])(); // Extract user from context
+    const { bearerKey } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        // Bugünün tarihini al (YYYY-MM-DD formatında)
+        const today = new Date().toISOString().split("T")[0];
+        console.log("Bugünün Tarihi:", today);
         // Todo verilerini çek
         const fetchTodos = async ()=>{
             try {
-                const response = await fetch('http://217.195.207.244:8081/calendars', {
-                    method: 'GET',
+                const response = await fetch("http://217.195.207.244:8081/calendars", {
+                    method: "GET",
                     headers: {
                         Authorization: `Bearer ${bearerKey}`,
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json"
                     }
                 });
-                if (!response.ok) throw new Error('Todo verileri alınamadı');
+                if (!response.ok) {
+                    throw new Error(`Todo verileri alınamadı, durum kodu: ${response.status}`);
+                }
                 const data = await response.json();
-                // Filter todos based on userId
-                const userTodos = data._embedded.calendars.filter((todo)=>todo.userId === user.userId // Assuming userId is available in the user context
-                );
-                setTodos(userTodos);
+                console.log("Takvimden Gelen Tüm Veri:", data._embedded.calendars);
+                // Bugüne ait todo'ları filtrele
+                const todayTodos = data._embedded.calendars.filter((todo)=>todo.date === today);
+                console.log("Bugüne Ait Todo'lar:", todayTodos);
+                setTodos(todayTodos);
             } catch (error) {
-                console.error('Todo verileri alınırken hata oluştu:', error);
+                console.error("Todo verileri alınırken hata oluştu:", error);
             }
         };
         // Proje verilerini çek
         const fetchProjects = async ()=>{
             try {
-                const response = await fetch('http://217.195.207.244:8081/projects', {
-                    method: 'GET',
+                const response = await fetch("http://217.195.207.244:8081/projects", {
+                    method: "GET",
                     headers: {
                         Authorization: `Bearer ${bearerKey}`,
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json"
                     }
                 });
-                if (!response.ok) throw new Error('Proje verileri alınamadı');
+                if (!response.ok) throw new Error("Proje verileri alınamadı");
                 const data = await response.json();
-                // Filter projects based on userId
-                const userProjects = data._embedded.projects.filter((project)=>project.userId === user.userId // Assuming userId is available in the user context
-                );
-                // Sadece devam eden projeleri filtrele
-                const ongoingProjects = userProjects.filter((project)=>project.projectStatus === 'Devam Ediyor');
+                const ongoingProjects = data._embedded.projects.filter((project)=>project.projectStatus === "Devam Ediyor");
                 setProjects(ongoingProjects);
             } catch (error) {
-                console.error('Proje verileri alınırken hata oluştu:', error);
+                console.error("Proje verileri alınırken hata oluştu:", error);
             }
         };
-        if (bearerKey && user) {
+        if (bearerKey) {
             fetchTodos();
             fetchProjects();
+        } else {
+            console.log("BearerKey eksik, API çağrısı yapılamadı.");
         }
     }, [
-        bearerKey,
-        user
-    ]); // Dependency array includes bearerKey and user
-    const handleToggleTodo = async (index, id)=>{
-        const updatedTodos = [
-            ...todos
-        ];
-        updatedTodos[index].checked = !updatedTodos[index].checked;
+        bearerKey
+    ]);
+    const handleDeleteTodo = async (index, id)=>{
+        const confirmDelete = window.confirm("Bu todo'yu silmek istediğinize emin misiniz?");
+        if (!confirmDelete) return;
+        const updatedTodos = todos.filter((_, i)=>i !== index);
         setTodos(updatedTodos);
-        // API'ye checked durumunu güncelle
         try {
             const response = await fetch(`http://217.195.207.244:8081/calendars/${id}`, {
-                method: 'PATCH',
+                method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${bearerKey}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    checked: updatedTodos[index].checked
-                })
+                    "Content-Type": "application/json"
+                }
             });
-            if (!response.ok) throw new Error('Todo güncellenemedi');
-            console.log('Todo başarıyla güncellendi');
+            if (!response.ok) throw new Error("Todo silinirken hata oluştu");
+            console.log("Todo başarıyla silindi");
         } catch (error) {
-            console.error('Todo güncellenirken hata oluştu:', error);
-            // Hata durumunda eski duruma geri dön
-            updatedTodos[index].checked = !updatedTodos[index].checked;
-            setTodos([
-                ...updatedTodos
-            ]);
+            console.error("Todo silinirken hata oluştu:", error);
+            setTodos(todos); // Hata olursa eski state'i geri yükle
         }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -465,12 +467,12 @@ const Homepage = ()=>{
                 className: "w-[5%] h-full",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                     fileName: "[project]/app/homepage/page.js",
-                    lineNumber: 140,
+                    lineNumber: 139,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/homepage/page.js",
-                lineNumber: 139,
+                lineNumber: 138,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -488,34 +490,34 @@ const Homepage = ()=>{
                                         children: "Hoşgeldiniz!"
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 148,
+                                        lineNumber: 147,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "absolute top-4 right-4",
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaBell"], {
-                                            className: "text-3xl text-[#0000cd] cursor-pointer hover:text-[#0000cd]"
+                                            className: "text-3xl text-[#0000cd] cursor-pointer hover:text-[#6666ff]"
                                         }, void 0, false, {
                                             fileName: "[project]/app/homepage/page.js",
-                                            lineNumber: 153,
+                                            lineNumber: 151,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 152,
+                                        lineNumber: 150,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/homepage/page.js",
-                                lineNumber: 147,
+                                lineNumber: 146,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {
                                 className: "my-4 border-gray-100"
                             }, void 0, false, {
                                 fileName: "[project]/app/homepage/page.js",
-                                lineNumber: 156,
+                                lineNumber: 154,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -526,34 +528,34 @@ const Homepage = ()=>{
                                         projects: projects
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 158,
+                                        lineNumber: 156,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
                                         title: "Yapılması Gerekenler",
                                         todos: todos,
-                                        onToggleTodo: handleToggleTodo
+                                        onDeleteTodo: handleDeleteTodo
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 159,
+                                        lineNumber: 157,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
                                         title: "Tamamlanan Projeler",
                                         projects: [
-                                            'Proje 1',
-                                            'Proje 2',
-                                            'Proje 3'
+                                            "Proje 1",
+                                            "Proje 2",
+                                            "Proje 3"
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 164,
+                                        lineNumber: 162,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/homepage/page.js",
-                                lineNumber: 157,
+                                lineNumber: 155,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
@@ -568,21 +570,21 @@ const Homepage = ()=>{
                                                 className: "w-12 h-12"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/homepage/page.js",
-                                                lineNumber: 171,
+                                                lineNumber: 169,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                 className: "text-lg font-semibold text-blue-900",
-                                                children: user
+                                                children: "Şirket Adı"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/homepage/page.js",
-                                                lineNumber: 172,
+                                                lineNumber: 170,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 170,
+                                        lineNumber: 168,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -590,35 +592,35 @@ const Homepage = ()=>{
                                         children: "Şirket Tanıtım Yazısı"
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 174,
+                                        lineNumber: 172,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/homepage/page.js",
-                                lineNumber: 169,
+                                lineNumber: 167,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/homepage/page.js",
-                        lineNumber: 146,
+                        lineNumber: 145,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/homepage/page.js",
-                    lineNumber: 145,
+                    lineNumber: 144,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/homepage/page.js",
-                lineNumber: 144,
+                lineNumber: 143,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/homepage/page.js",
-        lineNumber: 137,
+        lineNumber: 136,
         columnNumber: 5
     }, this);
 };
