@@ -34,7 +34,9 @@ export default function AddProject() {
     setError(null);
     setSuccess(null);
 
-    const teamArray = formData.team ? formData.team.split(',').map((member) => member.trim()) : [];
+    const teamArray = formData.team
+      ? formData.team.split(',').map((member) => member.trim())
+      : [];
 
     const projectData = {
       projectName: formData.projectName,
@@ -100,17 +102,31 @@ export default function AddProject() {
       <Toaster position="top-right" reverseOrder={false} />
       <NewSidebar />
       <div className="p-5 flex flex-col h-full">
-        <h1 className="mb-5 text-[40px] font-bold text-[#0000cd]">Proje Ekle</h1>
+        <h1 className="mb-5 text-[40px] font-bold text-[#0000cd]">
+          Proje Ekle
+        </h1>
 
-        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            {error}
+          </div>
+        )}
         {success && (
-          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">{success}</div>
+          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
+            {success}
+          </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded shadow space-y-6"
+        >
           {/* Proje Adı */}
           <div>
-            <label htmlFor="projectName" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="projectName"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Proje Adı
             </label>
             <input
@@ -126,7 +142,10 @@ export default function AddProject() {
 
           {/* STB Kodu */}
           <div>
-            <label htmlFor="stbCode" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="stbCode"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               STB Kodu
             </label>
             <input
@@ -142,7 +161,10 @@ export default function AddProject() {
 
           {/* Proje Özeti */}
           <div>
-            <label htmlFor="summary" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="summary"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Proje Özeti
             </label>
             <textarea
@@ -158,7 +180,10 @@ export default function AddProject() {
 
           {/* Proje Amacı */}
           <div>
-            <label htmlFor="purpose" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="purpose"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Proje Amacı
             </label>
             <textarea
@@ -174,7 +199,10 @@ export default function AddProject() {
 
           {/* Türü */}
           <div>
-            <label htmlFor="type" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="type"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Proje Türü
             </label>
             <select
@@ -196,7 +224,10 @@ export default function AddProject() {
 
           {/* Sektörü */}
           <div>
-            <label htmlFor="sector" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="sector"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Sektör
             </label>
             <select
@@ -213,7 +244,9 @@ export default function AddProject() {
               <option value="Sağlık">Sağlık</option>
               <option value="Finans">Finans</option>
               <option value="E-Ticaret">E-Ticaret</option>
-              <option value="Pazarlama ve Reklamcılık">Pazarlama ve Reklamcılık</option>
+              <option value="Pazarlama ve Reklamcılık">
+                Pazarlama ve Reklamcılık
+              </option>
               <option value="Medya">Medya</option>
               <option value="Diğer">Diğer</option>
             </select>
@@ -221,7 +254,10 @@ export default function AddProject() {
 
           {/* Bütçesi */}
           <div>
-            <label htmlFor="budget" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="budget"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Bütçe (TL)
             </label>
             <input
@@ -238,7 +274,10 @@ export default function AddProject() {
 
           {/* Ekibi */}
           <div>
-            <label htmlFor="team" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="team"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Proje Ekibi (Virgülle ayırın)
             </label>
             <input
@@ -255,7 +294,10 @@ export default function AddProject() {
 
           {/* Başlangıç Tarihi */}
           <div>
-            <label htmlFor="startDate" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="startDate"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Başlangıç Tarihi
             </label>
             <input
@@ -271,7 +313,10 @@ export default function AddProject() {
 
           {/* Bitiş Tarihi */}
           <div>
-            <label htmlFor="endDate" className="block text-blue-900 font-semibold mb-2">
+            <label
+              htmlFor="endDate"
+              className="block text-blue-900 font-semibold mb-2"
+            >
               Bitiş Tarihi
             </label>
             <input
@@ -288,7 +333,7 @@ export default function AddProject() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-[#6666ff] text-white p-3 rounded hover:bg-[#0000cd] transition-colors"
+            className="w-full bg-[#0000cd] text-white p-3 rounded hover:bg-[#0000cd] transition-colors"
           >
             Projeyi Kaydet
           </button>
