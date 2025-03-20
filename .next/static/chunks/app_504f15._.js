@@ -56,7 +56,7 @@ var _s = __turbopack_refresh__.signature();
 function NewSidebar() {
     _s();
     const [isOpen, setIsOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const { user, logout } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     console.log('USERRRR', user);
     const toggleSidebar = ()=>{
         setIsOpen(!isOpen);
@@ -252,9 +252,16 @@ function NewSidebar() {
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            href: "/logout",
+                            href: "/login",
                             className: "flex items-center justify-center bg-red-600 p-3 rounded hover:bg-red-700",
-                            children: "Çıkış Yap"
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: logout,
+                                children: "Çıkış Yap"
+                            }, void 0, false, {
+                                fileName: "[project]/app/components/NewSideBar/page.js",
+                                lineNumber: 90,
+                                columnNumber: 13
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/components/NewSideBar/page.js",
                             lineNumber: 86,
@@ -289,7 +296,7 @@ function NewSidebar() {
         ]
     }, void 0, true);
 }
-_s(NewSidebar, "QpQV2+7KbRgxJuw6Kb3cae9iWcs=", false, function() {
+_s(NewSidebar, "+KE6WLZ5x8e06OYxpiu9re8IOKY=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
     ];
