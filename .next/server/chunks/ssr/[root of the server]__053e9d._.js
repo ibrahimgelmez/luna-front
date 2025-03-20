@@ -50,9 +50,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 const AuthContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])();
 const AuthProvider = ({ children })=>{
-    const [user, setUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [user, setUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [bearerKey, setBearerKey] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
-    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true); // Yeni state
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true); // New state for loading
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const storedUser = localStorage.getItem('user');
@@ -63,13 +63,19 @@ const AuthProvider = ({ children })=>{
         if (storedBearerKey) {
             setBearerKey(storedBearerKey);
         }
-        setIsLoading(false); // Yükleme tamamlandı
+        setIsLoading(false); // Loading is complete
     }, []);
-    // useEffect(() => {
-    //   if (!isLoading && (!bearerKey || !user)) {
-    //     router.push('/login');
-    //   }
-    // }, [bearerKey, user, isLoading]); // Hem bearerKey hem de user değiştiğinde kontrol et
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        // Check if loading is done, and if no bearerKey or user, redirect to login
+        if (!isLoading && (!bearerKey || !user)) {
+            router.push('/login');
+        }
+    }, [
+        bearerKey,
+        user,
+        isLoading,
+        router
+    ]);
     const login = (userData, token, keepLogged)=>{
         setUser(userData);
         setBearerKey(token);
@@ -81,8 +87,8 @@ const AuthProvider = ({ children })=>{
     const logout = ()=>{
         setUser(null);
         setBearerKey('');
-        localStorage.removeItem('user');
-        localStorage.removeItem('bearerKey');
+        localStorage.clear('user');
+        localStorage.clear('bearerKey');
         router.push('/login');
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AuthContext.Provider, {
@@ -99,7 +105,7 @@ const AuthProvider = ({ children })=>{
         ]
     }, void 0, true, {
         fileName: "[project]/context/AuthContext.js",
-        lineNumber: 52,
+        lineNumber: 53,
         columnNumber: 5
     }, this);
 };

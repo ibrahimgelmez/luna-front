@@ -51,7 +51,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$ico
 ;
 function NewSidebar() {
     const [isOpen, setIsOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
+    const { user, logout } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
     console.log('USERRRR', user);
     const toggleSidebar = ()=>{
         setIsOpen(!isOpen);
@@ -247,9 +247,16 @@ function NewSidebar() {
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                            href: "/logout",
+                            href: "/login",
                             className: "flex items-center justify-center bg-red-600 p-3 rounded hover:bg-red-700",
-                            children: "Çıkış Yap"
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: logout,
+                                children: "Çıkış Yap"
+                            }, void 0, false, {
+                                fileName: "[project]/app/components/NewSideBar/page.js",
+                                lineNumber: 90,
+                                columnNumber: 13
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/components/NewSideBar/page.js",
                             lineNumber: 86,
@@ -370,7 +377,7 @@ const Card = ({ title, projects, todos, onToggleTodo })=>{
 const Homepage = ()=>{
     const [todos, setTodos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [projects, setProjects] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const { bearerKey } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
+    const { bearerKey, user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])(); // Extract user from context
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         // Todo verilerini çek
         const fetchTodos = async ()=>{
@@ -384,7 +391,10 @@ const Homepage = ()=>{
                 });
                 if (!response.ok) throw new Error('Todo verileri alınamadı');
                 const data = await response.json();
-                setTodos(data._embedded.calendars);
+                // Filter todos based on userId
+                const userTodos = data._embedded.calendars.filter((todo)=>todo.userId === user.userId // Assuming userId is available in the user context
+                );
+                setTodos(userTodos);
             } catch (error) {
                 console.error('Todo verileri alınırken hata oluştu:', error);
             }
@@ -401,20 +411,24 @@ const Homepage = ()=>{
                 });
                 if (!response.ok) throw new Error('Proje verileri alınamadı');
                 const data = await response.json();
+                // Filter projects based on userId
+                const userProjects = data._embedded.projects.filter((project)=>project.userId === user.userId // Assuming userId is available in the user context
+                );
                 // Sadece devam eden projeleri filtrele
-                const ongoingProjects = data._embedded.projects.filter((project)=>project.projectStatus === 'Devam Ediyor');
+                const ongoingProjects = userProjects.filter((project)=>project.projectStatus === 'Devam Ediyor');
                 setProjects(ongoingProjects);
             } catch (error) {
                 console.error('Proje verileri alınırken hata oluştu:', error);
             }
         };
-        if (bearerKey) {
+        if (bearerKey && user) {
             fetchTodos();
             fetchProjects();
         }
     }, [
-        bearerKey
-    ]);
+        bearerKey,
+        user
+    ]); // Dependency array includes bearerKey and user
     const handleToggleTodo = async (index, id)=>{
         const updatedTodos = [
             ...todos
@@ -451,12 +465,12 @@ const Homepage = ()=>{
                 className: "w-[5%] h-full",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                     fileName: "[project]/app/homepage/page.js",
-                    lineNumber: 129,
+                    lineNumber: 140,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/homepage/page.js",
-                lineNumber: 128,
+                lineNumber: 139,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -474,7 +488,7 @@ const Homepage = ()=>{
                                         children: "Hoşgeldiniz!"
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 137,
+                                        lineNumber: 148,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -483,25 +497,25 @@ const Homepage = ()=>{
                                             className: "text-3xl text-[#0000cd] cursor-pointer hover:text-[#0000cd]"
                                         }, void 0, false, {
                                             fileName: "[project]/app/homepage/page.js",
-                                            lineNumber: 142,
+                                            lineNumber: 153,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 141,
+                                        lineNumber: 152,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/homepage/page.js",
-                                lineNumber: 136,
+                                lineNumber: 147,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {
                                 className: "my-4 border-gray-100"
                             }, void 0, false, {
                                 fileName: "[project]/app/homepage/page.js",
-                                lineNumber: 145,
+                                lineNumber: 156,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -512,7 +526,7 @@ const Homepage = ()=>{
                                         projects: projects
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 147,
+                                        lineNumber: 158,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
@@ -521,7 +535,7 @@ const Homepage = ()=>{
                                         onToggleTodo: handleToggleTodo
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 148,
+                                        lineNumber: 159,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
@@ -533,13 +547,13 @@ const Homepage = ()=>{
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 153,
+                                        lineNumber: 164,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/homepage/page.js",
-                                lineNumber: 146,
+                                lineNumber: 157,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
@@ -554,21 +568,21 @@ const Homepage = ()=>{
                                                 className: "w-12 h-12"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/homepage/page.js",
-                                                lineNumber: 160,
+                                                lineNumber: 171,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                 className: "text-lg font-semibold text-blue-900",
-                                                children: "Şirket Adı"
+                                                children: user
                                             }, void 0, false, {
                                                 fileName: "[project]/app/homepage/page.js",
-                                                lineNumber: 161,
+                                                lineNumber: 172,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 159,
+                                        lineNumber: 170,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -576,35 +590,35 @@ const Homepage = ()=>{
                                         children: "Şirket Tanıtım Yazısı"
                                     }, void 0, false, {
                                         fileName: "[project]/app/homepage/page.js",
-                                        lineNumber: 165,
+                                        lineNumber: 174,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/homepage/page.js",
-                                lineNumber: 158,
+                                lineNumber: 169,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/homepage/page.js",
-                        lineNumber: 135,
+                        lineNumber: 146,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/homepage/page.js",
-                    lineNumber: 134,
+                    lineNumber: 145,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/homepage/page.js",
-                lineNumber: 133,
+                lineNumber: 144,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/homepage/page.js",
-        lineNumber: 126,
+        lineNumber: 137,
         columnNumber: 5
     }, this);
 };

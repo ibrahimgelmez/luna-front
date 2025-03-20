@@ -56,7 +56,7 @@ var _s = __turbopack_refresh__.signature();
 function NewSidebar() {
     _s();
     const [isOpen, setIsOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const { user, logout } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     console.log('USERRRR', user);
     const toggleSidebar = ()=>{
         setIsOpen(!isOpen);
@@ -252,9 +252,16 @@ function NewSidebar() {
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            href: "/logout",
+                            href: "/login",
                             className: "flex items-center justify-center bg-red-600 p-3 rounded hover:bg-red-700",
-                            children: "Çıkış Yap"
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: logout,
+                                children: "Çıkış Yap"
+                            }, void 0, false, {
+                                fileName: "[project]/app/components/NewSideBar/page.js",
+                                lineNumber: 90,
+                                columnNumber: 13
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/components/NewSideBar/page.js",
                             lineNumber: 86,
@@ -289,7 +296,7 @@ function NewSidebar() {
         ]
     }, void 0, true);
 }
-_s(NewSidebar, "QpQV2+7KbRgxJuw6Kb3cae9iWcs=", false, function() {
+_s(NewSidebar, "+KE6WLZ5x8e06OYxpiu9re8IOKY=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
     ];
@@ -326,7 +333,7 @@ var _s = __turbopack_refresh__.signature();
 function Projects() {
     _s();
     const [projects, setProjects] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const { bearerKey } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const { bearerKey, user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])(); // Make sure to extract user from context
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "Projects.useEffect": ()=>{
             const fetchProjects = {
@@ -343,7 +350,11 @@ function Projects() {
                             throw new Error('Projeler yüklenemedi');
                         }
                         const data = await response.json();
-                        setProjects(data._embedded.projects);
+                        // Filter projects to only include those with matching userId
+                        const userProjects = data._embedded.projects.filter({
+                            "Projects.useEffect.fetchProjects.userProjects": (project)=>project.userId === user // Make sure `user` has the userId property
+                        }["Projects.useEffect.fetchProjects.userProjects"]);
+                        setProjects(userProjects); // Set the filtered projects
                     } catch (error) {
                         console.error('Projeler yüklenirken hata oluştu:', error);
                     }
@@ -352,14 +363,15 @@ function Projects() {
             fetchProjects();
         }
     }["Projects.useEffect"], [
-        bearerKey
-    ]);
+        bearerKey,
+        user
+    ]); // Dependency array includes bearerKey and user
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-4 pt-16 bg-[#eff8fb] px-32 h-[100vh] relative",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$NewSideBar$2f$page$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/app/projects/page.js",
-                lineNumber: 37,
+                lineNumber: 43,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -370,7 +382,7 @@ function Projects() {
                         children: "Projelerim"
                     }, void 0, false, {
                         fileName: "[project]/app/projects/page.js",
-                        lineNumber: 39,
+                        lineNumber: 45,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -384,7 +396,7 @@ function Projects() {
                                 children: "Sırala"
                             }, void 0, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 41,
+                                lineNumber: 47,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -392,7 +404,7 @@ function Projects() {
                                 children: "Yakın Tarihe Göre Sırala"
                             }, void 0, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 44,
+                                lineNumber: 50,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -400,19 +412,19 @@ function Projects() {
                                 children: "Bitme Yüzdesine Göre Sırala"
                             }, void 0, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 45,
+                                lineNumber: 51,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/projects/page.js",
-                        lineNumber: 40,
+                        lineNumber: 46,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/projects/page.js",
-                lineNumber: 38,
+                lineNumber: 44,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -425,39 +437,39 @@ function Projects() {
                                 children: "Proje Adı"
                             }, void 0, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 53,
+                                lineNumber: 59,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Başlangıç Tarihi"
                             }, void 0, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 54,
+                                lineNumber: 60,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Bitiş Tarihi"
                             }, void 0, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 55,
+                                lineNumber: 61,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Proje Türü"
                             }, void 0, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 56,
+                                lineNumber: 62,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {}, void 0, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 57,
+                                lineNumber: 63,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/projects/page.js",
-                        lineNumber: 52,
+                        lineNumber: 58,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -472,28 +484,28 @@ function Projects() {
                                             children: project.projectName
                                         }, void 0, false, {
                                             fileName: "[project]/app/projects/page.js",
-                                            lineNumber: 69,
+                                            lineNumber: 75,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: new Date(project.projectStartDate).toLocaleDateString()
                                         }, void 0, false, {
                                             fileName: "[project]/app/projects/page.js",
-                                            lineNumber: 72,
+                                            lineNumber: 78,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: new Date(project.projectEndDate).toLocaleDateString()
                                         }, void 0, false, {
                                             fileName: "[project]/app/projects/page.js",
-                                            lineNumber: 75,
+                                            lineNumber: 81,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: project.projectType
                                         }, void 0, false, {
                                             fileName: "[project]/app/projects/page.js",
-                                            lineNumber: 78,
+                                            lineNumber: 84,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -503,44 +515,44 @@ function Projects() {
                                                 size: 30
                                             }, void 0, false, {
                                                 fileName: "[project]/app/projects/page.js",
-                                                lineNumber: 80,
+                                                lineNumber: 86,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/projects/page.js",
-                                            lineNumber: 79,
+                                            lineNumber: 85,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/projects/page.js",
-                                    lineNumber: 68,
+                                    lineNumber: 74,
                                     columnNumber: 15
                                 }, this)
                             }, project._links.self.href, false, {
                                 fileName: "[project]/app/projects/page.js",
-                                lineNumber: 62,
+                                lineNumber: 68,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/projects/page.js",
-                        lineNumber: 59,
+                        lineNumber: 65,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/projects/page.js",
-                lineNumber: 50,
+                lineNumber: 56,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/projects/page.js",
-        lineNumber: 36,
+        lineNumber: 42,
         columnNumber: 5
     }, this);
 }
-_s(Projects, "xcaboDDIVmP1tc+aTFI+mVMkJRg=", false, function() {
+_s(Projects, "UeepMDqDlQhZJ3ynGQE84kav85A=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
     ];

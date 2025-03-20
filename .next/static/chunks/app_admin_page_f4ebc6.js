@@ -11,11 +11,13 @@ __turbopack_esm__({
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/context/AuthContext.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/axios/lib/axios.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-icons/fa/index.mjs [app-client] (ecmascript)");
 ;
 var _s = __turbopack_refresh__.signature();
 'use client';
+;
 ;
 ;
 ;
@@ -28,7 +30,8 @@ function Admin() {
     const [search, setSearch] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [username, setUsername] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [password, setPassword] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const { bearerKey } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const { bearerKey, user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const fetchCompanies = async ()=>{
         try {
             const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get('http://217.195.207.244:8081/users', {
@@ -66,6 +69,9 @@ function Admin() {
             console.error('Error deleting company', error);
         }
     };
+    if (user !== 'admin') {
+        router.push('/');
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex flex-col items-center justify-center min-h-screen bg-[#0000cd] ",
         children: [
@@ -78,7 +84,7 @@ function Admin() {
                         children: "+"
                     }, void 0, false, {
                         fileName: "[project]/app/admin/page.js",
-                        lineNumber: 54,
+                        lineNumber: 61,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -90,13 +96,13 @@ function Admin() {
                         children: "-"
                     }, void 0, false, {
                         fileName: "[project]/app/admin/page.js",
-                        lineNumber: 60,
+                        lineNumber: 67,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/admin/page.js",
-                lineNumber: 53,
+                lineNumber: 60,
                 columnNumber: 7
             }, this),
             showAddPopup && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -109,7 +115,7 @@ function Admin() {
                             children: "Add Company"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 74,
+                            lineNumber: 81,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -120,7 +126,7 @@ function Admin() {
                             className: "border text-black p-2 w-full mb-2 rounded-md"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 75,
+                            lineNumber: 82,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -131,7 +137,7 @@ function Admin() {
                             className: "border text-black p-2 w-full mb-2 rounded-md"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 82,
+                            lineNumber: 89,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -140,7 +146,7 @@ function Admin() {
                             children: "Add Company"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 89,
+                            lineNumber: 96,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -149,18 +155,18 @@ function Admin() {
                             children: "Close"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 95,
+                            lineNumber: 102,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/page.js",
-                    lineNumber: 73,
+                    lineNumber: 80,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/admin/page.js",
-                lineNumber: 72,
+                lineNumber: 79,
                 columnNumber: 9
             }, this),
             showListPopup && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -173,7 +179,7 @@ function Admin() {
                             children: "Company List"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 108,
+                            lineNumber: 115,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -184,7 +190,7 @@ function Admin() {
                             className: "border text-black p-2 w-full mb-2 rounded-md"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 109,
+                            lineNumber: 116,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -195,7 +201,7 @@ function Admin() {
                                             children: company.username
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/page.js",
-                                            lineNumber: 124,
+                                            lineNumber: 131,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaTrash"], {
@@ -203,18 +209,18 @@ function Admin() {
                                             className: "text-gray-500 hover:text-red-500 cursor-pointer"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/page.js",
-                                            lineNumber: 125,
+                                            lineNumber: 132,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, company.id, true, {
                                     fileName: "[project]/app/admin/page.js",
-                                    lineNumber: 120,
+                                    lineNumber: 127,
                                     columnNumber: 19
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 116,
+                            lineNumber: 123,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -223,30 +229,31 @@ function Admin() {
                             children: "Close"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/page.js",
-                            lineNumber: 132,
+                            lineNumber: 139,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/page.js",
-                    lineNumber: 107,
+                    lineNumber: 114,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/admin/page.js",
-                lineNumber: 106,
+                lineNumber: 113,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/admin/page.js",
-        lineNumber: 52,
+        lineNumber: 59,
         columnNumber: 5
     }, this);
 }
-_s(Admin, "gcH4fexi2hLhKT6fD7G87638rpQ=", false, function() {
+_s(Admin, "UxyjzbTs4aoqsVTGSHyye+lKxs4=", false, function() {
     return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];
 });
 _c = Admin;

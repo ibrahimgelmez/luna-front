@@ -9,7 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 
 export default function NewSidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   console.log('USERRRR', user);
 
   const toggleSidebar = () => {
@@ -84,10 +84,10 @@ export default function NewSidebar() {
             </ul>
           </nav>
           <Link
-            href="/logout"
+            href="/login"
             className="flex items-center justify-center bg-red-600 p-3 rounded hover:bg-red-700"
           >
-            Çıkış Yap
+            <button onClick={logout}>Çıkış Yap</button>
           </Link>
         </div>
       </div>

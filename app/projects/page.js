@@ -7,7 +7,7 @@ import NewSidebar from '../components/NewSideBar/page';
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
-  const { bearerKey } = useAuth();
+  const { bearerKey, user } = useAuth(); // Make sure to extract user from context
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -23,14 +23,20 @@ export default function Projects() {
           throw new Error('Projeler yüklenemedi');
         }
         const data = await response.json();
-        setProjects(data._embedded.projects);
+
+        // Filter projects to only include those with matching userId
+        const userProjects = data._embedded.projects.filter(
+          (project) => project.userId === user // Make sure `user` has the userId property
+        );
+
+        setProjects(userProjects); // Set the filtered projects
       } catch (error) {
         console.error('Projeler yüklenirken hata oluştu:', error);
       }
     };
 
     fetchProjects();
-  }, [bearerKey]);
+  }, [bearerKey, user]); // Dependency array includes bearerKey and user
 
   return (
     <div className="p-4 pt-16 bg-[#eff8fb] px-32 h-[100vh] relative">

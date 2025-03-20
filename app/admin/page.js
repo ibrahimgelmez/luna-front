@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaTrash } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function Admin() {
   const [showAddPopup, setShowAddPopup] = useState(false);
@@ -11,7 +12,9 @@ export default function Admin() {
   const [search, setSearch] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { bearerKey } = useAuth();
+  const { bearerKey, user } = useAuth();
+
+  const router = useRouter();
 
   const fetchCompanies = async () => {
     try {
@@ -47,6 +50,10 @@ export default function Admin() {
       console.error('Error deleting company', error);
     }
   };
+
+  if (user !== 'admin') {
+    router.push('/');
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0000cd] ">

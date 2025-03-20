@@ -1,14 +1,13 @@
 {
-  "/homepage/page": "app/homepage/page.js",
+  "/page": "app/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/_not-found/page": "app/_not-found/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/admin/page": "app/admin/page.js",
-  "/page": "app/page.js",
-  "/login/page": "app/login/page.js",
   "/project-tracking/page": "app/project-tracking/page.js",
-  "/add-project/page": "app/add-project/page.js",
+  "/login/page": "app/login/page.js",
+  "/homepage/page": "app/homepage/page.js",
+  "/admin/page": "app/admin/page.js",
   "/projects/page": "app/projects/page.js",
-  "/project-detail/[id]/page": "app/project-detail/[id]/page.js",
+  "/add-project/page": "app/add-project/page.js",
   "/takvim/page": "app/takvim/page.js"
 }

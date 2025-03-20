@@ -5,9 +5,9 @@ import { createContext, useState, useContext, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(null);
   const [bearerKey, setBearerKey] = useState('');
-  const [isLoading, setIsLoading] = useState(true); // Yeni state
+  const [isLoading, setIsLoading] = useState(true); // New state for loading
   const router = useRouter();
 
   useEffect(() => {
@@ -20,14 +20,15 @@ export const AuthProvider = ({ children }) => {
     if (storedBearerKey) {
       setBearerKey(storedBearerKey);
     }
-    setIsLoading(false); // Yükleme tamamlandı
+    setIsLoading(false); // Loading is complete
   }, []);
 
-  // useEffect(() => {
-  //   if (!isLoading && (!bearerKey || !user)) {
-  //     router.push('/login');
-  //   }
-  // }, [bearerKey, user, isLoading]); // Hem bearerKey hem de user değiştiğinde kontrol et
+  useEffect(() => {
+    // Check if loading is done, and if no bearerKey or user, redirect to login
+    if (!isLoading && (!bearerKey || !user)) {
+      router.push('/login');
+    }
+  }, [bearerKey, user, isLoading, router]);
 
   const login = (userData, token, keepLogged) => {
     setUser(userData);
@@ -43,8 +44,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setBearerKey('');
 
-    localStorage.removeItem('user');
-    localStorage.removeItem('bearerKey');
+    localStorage.clear('user');
+    localStorage.clear('bearerKey');
     router.push('/login');
   };
 
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
       value={{ user, bearerKey, login, logout, setBearerKey }}
     >
       {!isLoading && children}{' '}
-      {/* Yüklenme tamamlanmadan önce çocuk bileşenleri render etme */}
+      {/* Render children only after loading is complete */}
     </AuthContext.Provider>
   );
 };

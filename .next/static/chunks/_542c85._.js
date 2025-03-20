@@ -20,9 +20,9 @@ var _s = __turbopack_refresh__.signature(), _s1 = __turbopack_refresh__.signatur
 const AuthContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createContext"])();
 const AuthProvider = ({ children })=>{
     _s();
-    const [user, setUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [user, setUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [bearerKey, setBearerKey] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true); // Yeni state
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true); // New state for loading
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "AuthProvider.useEffect": ()=>{
@@ -34,14 +34,22 @@ const AuthProvider = ({ children })=>{
             if (storedBearerKey) {
                 setBearerKey(storedBearerKey);
             }
-            setIsLoading(false); // Yükleme tamamlandı
+            setIsLoading(false); // Loading is complete
         }
     }["AuthProvider.useEffect"], []);
-    // useEffect(() => {
-    //   if (!isLoading && (!bearerKey || !user)) {
-    //     router.push('/login');
-    //   }
-    // }, [bearerKey, user, isLoading]); // Hem bearerKey hem de user değiştiğinde kontrol et
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "AuthProvider.useEffect": ()=>{
+            // Check if loading is done, and if no bearerKey or user, redirect to login
+            if (!isLoading && (!bearerKey || !user)) {
+                router.push('/login');
+            }
+        }
+    }["AuthProvider.useEffect"], [
+        bearerKey,
+        user,
+        isLoading,
+        router
+    ]);
     const login = (userData, token, keepLogged)=>{
         setUser(userData);
         setBearerKey(token);
@@ -53,8 +61,8 @@ const AuthProvider = ({ children })=>{
     const logout = ()=>{
         setUser(null);
         setBearerKey('');
-        localStorage.removeItem('user');
-        localStorage.removeItem('bearerKey');
+        localStorage.clear('user');
+        localStorage.clear('bearerKey');
         router.push('/login');
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(AuthContext.Provider, {
@@ -71,11 +79,11 @@ const AuthProvider = ({ children })=>{
         ]
     }, void 0, true, {
         fileName: "[project]/context/AuthContext.js",
-        lineNumber: 52,
+        lineNumber: 53,
         columnNumber: 5
     }, this);
 };
-_s(AuthProvider, "vgjYKH7UujLlfbyf6hPlkpjJhpw=", false, function() {
+_s(AuthProvider, "MlfGrsdsusN7lCpAy0qHZwKbL9w=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];
