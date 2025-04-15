@@ -51,10 +51,6 @@ export default function Admin() {
     }
   };
 
-  if (user !== 'admin') {
-    router.push('/');
-  }
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0000cd] ">
       <div className="flex space-x-4">
