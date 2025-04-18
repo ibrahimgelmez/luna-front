@@ -13,7 +13,7 @@ export default function Projects() {
     const fetchProjects = async () => {
       try {
         const response = await fetch(
-          'https://server.lunaproject.com.tr/projects',
+          'https://server.lunaproject.com.tr:8081/projects',
           {
             method: 'GET',
             headers: {

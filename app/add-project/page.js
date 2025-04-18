@@ -56,7 +56,7 @@ export default function AddProject() {
 
     try {
       const response = await fetch(
-        'https://server.lunaproject.com.tr/projects',
+        'https://server.lunaproject.com.tr:8081/projects',
         {
           method: 'POST',
           headers: {

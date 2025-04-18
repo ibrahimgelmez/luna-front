@@ -23,7 +23,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'https://server.lunaproject.com.tr/login',
+        'https://server.lunaproject.com.tr:8081/login',
         {
           username,
           password,

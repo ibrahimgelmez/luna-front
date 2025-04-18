@@ -58,7 +58,7 @@ const Homepage = () => {
     const fetchTodos = async () => {
       try {
         const response = await fetch(
-          'https://server.lunaproject.com.tr/calendars',
+          'https://server.lunaproject.com.tr:8081/calendars',
           {
             method: 'GET',
             headers: {
@@ -81,7 +81,7 @@ const Homepage = () => {
     const fetchProjects = async () => {
       try {
         const response = await fetch(
-          'https://server.lunaproject.com.tr/projects',
+          'https://server.lunaproject.com.tr:8081/projects',
           {
             method: 'GET',
             headers: {
@@ -118,7 +118,7 @@ const Homepage = () => {
 
     try {
       const response = await fetch(
-        `https://server.lunaproject.com.tr/calendars/${id}`,
+        `https://server.lunaproject.com.tr:8081/calendars/${id}`,
         {
           method: 'DELETE',
           headers: {
