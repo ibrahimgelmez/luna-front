@@ -55,14 +55,17 @@ export default function AddProject() {
     console.log('Gönderilen Veri:', JSON.stringify(projectData));
 
     try {
-      const response = await fetch('http://217.195.207.244:8081/projects', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${bearerKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(projectData),
-      });
+      const response = await fetch(
+        'https://server.lunaproject.com.tr/projects',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${bearerKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(projectData),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();

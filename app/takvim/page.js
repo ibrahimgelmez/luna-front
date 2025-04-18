@@ -19,13 +19,16 @@ export default function Home() {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await fetch('http://217.195.207.244:8081/calendars', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${bearerKey}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await fetch(
+          'https://server.lunaproject.com.tr/calendars',
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${bearerKey}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
         if (!response.ok) throw new Error('Notlar alınamadı');
         const data = await response.json();
         const notesByDate = {};
@@ -45,19 +48,22 @@ export default function Home() {
   const saveNote = async () => {
     if (selectedDate && noteInput.trim() !== '') {
       try {
-        const response = await fetch('http://217.195.207.244:8081/calendars', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${bearerKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            date: selectedDate,
-            userId: 'ibrahim', // Bu, dinamik olabilir (useAuth'tan alınabilir)
-            todo: noteInput,
-            checked: false,
-          }),
-        });
+        const response = await fetch(
+          'https://server.lunaproject.com.tr/calendars',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${bearerKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              date: selectedDate,
+              userId: 'ibrahim', // Bu, dinamik olabilir (useAuth'tan alınabilir)
+              todo: noteInput,
+              checked: false,
+            }),
+          }
+        );
         if (!response.ok) throw new Error('Not eklenemedi');
         const newNote = await response.json();
         const updatedNotes = {
@@ -79,7 +85,7 @@ export default function Home() {
       const noteId = notes[selectedDate][index].id;
       try {
         const response = await fetch(
-          `http://217.195.207.244:8081/calendars/${noteId}`,
+          `https://server.lunaproject.com.tr/calendars/${noteId}`,
           {
             method: 'DELETE',
             headers: {

@@ -16,7 +16,7 @@ export default function ProjectDetail() {
       const fetchProject = async () => {
         try {
           const response = await fetch(
-            `http://217.195.207.244:8081/projects/${id}`,
+            `https://server.lunaproject.com.tr/projects/${id}`,
             {
               method: 'GET',
               headers: {

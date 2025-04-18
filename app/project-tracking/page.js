@@ -11,13 +11,16 @@ export default function ProjectTracking() {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const response = await fetch('http://217.195.207.244:8081/projects', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${bearerKey}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        'https://server.lunaproject.com.tr/projects',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${bearerKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       const data = await response.json();
       const filteredProjects = data._embedded.projects.filter(

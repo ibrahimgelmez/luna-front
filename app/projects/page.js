@@ -12,13 +12,16 @@ export default function Projects() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch('http://217.195.207.244:8081/projects', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${bearerKey}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await fetch(
+          'https://server.lunaproject.com.tr/projects',
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${bearerKey}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error('Projeler yüklenemedi');
         }
