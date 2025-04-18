@@ -12,7 +12,7 @@ export default function ProjectTracking() {
   useEffect(() => {
     const fetchProjects = async () => {
       const response = await fetch(
-        'https://server.lunaproject.com.tr:8081/projects',
+        'https://server.lunaproject.com.tr/projects',
         {
           method: 'GET',
           headers: {

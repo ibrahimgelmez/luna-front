@@ -19,7 +19,7 @@ export default function Admin() {
   const fetchCompanies = async () => {
     try {
       const response = await axios.get(
-        'https://server.lunaproject.com.tr:8081/users',
+        'https://server.lunaproject.com.tr/users',
         {
           headers: { Authorization: `Bearer ${bearerKey}` },
         }
@@ -33,7 +33,7 @@ export default function Admin() {
   const addCompany = async () => {
     try {
       await axios.post(
-        'https://server.lunaproject.com.tr:8081/register',
+        'https://server.lunaproject.com.tr/register',
         { username, password },
         { headers: { Authorization: `Bearer ${bearerKey}` } }
       );
@@ -47,7 +47,7 @@ export default function Admin() {
 
   const deleteCompany = async (id) => {
     try {
-      await axios.delete(`https://server.lunaproject.com.tr:8081/delete/${id}`);
+      await axios.delete(`https://server.lunaproject.com.tr/delete/${id}`);
       fetchCompanies();
     } catch (error) {
       console.error('Error deleting company', error);

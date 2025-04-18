@@ -20,7 +20,7 @@ export default function Home() {
     const fetchNotes = async () => {
       try {
         const response = await fetch(
-          'https://server.lunaproject.com.tr:8081/calendars',
+          'https://server.lunaproject.com.tr/calendars',
           {
             method: 'GET',
             headers: {
@@ -49,7 +49,7 @@ export default function Home() {
     if (selectedDate && noteInput.trim() !== '') {
       try {
         const response = await fetch(
-          'https://server.lunaproject.com.tr:8081/calendars',
+          'https://server.lunaproject.com.tr/calendars',
           {
             method: 'POST',
             headers: {
@@ -85,7 +85,7 @@ export default function Home() {
       const noteId = notes[selectedDate][index].id;
       try {
         const response = await fetch(
-          `https://server.lunaproject.com.tr:8081/calendars/${noteId}`,
+          `https://server.lunaproject.com.tr/calendars/${noteId}`,
           {
             method: 'DELETE',
             headers: {
