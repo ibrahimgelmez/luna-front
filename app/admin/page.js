@@ -13,8 +13,14 @@ export default function Admin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { bearerKey, user } = useAuth();
-
   const router = useRouter();
+
+  // Check if user is authorized
+  useEffect(() => {
+    if (!user || user.username !== 'ibrahim') {
+      router.push('/'); // Redirect to home or unauthorized page
+    }
+  }, [user, router]);
 
   const fetchCompanies = async () => {
     try {
@@ -54,8 +60,13 @@ export default function Admin() {
     }
   };
 
+  // Render nothing or a loading state if user is not authorized
+  if (!user || user.username !== 'ibrahim') {
+    return null; // Or a loading spinner, or unauthorized message
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#0000cd] ">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#0000cd]">
       <div className="flex space-x-4">
         <button
           onClick={() => setShowAddPopup(true)}
