@@ -35,6 +35,7 @@ export default function Login() {
       router.push('/homepage');
     } catch (error) {
       console.error('Login failed', error);
+      alert('Şifre yanlış veya kullanıcı adı hatalı!');
     }
   };
 

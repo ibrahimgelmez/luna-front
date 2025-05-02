@@ -52,14 +52,45 @@ export default function ProjectTracking() {
   };
 
   // Checkbox değişimi
-  const handleCheckboxChange = (projectId, field) => {
-    setProjectStates((prev) => ({
-      ...prev,
-      [projectId]: {
-        ...prev[projectId],
-        [field]: !prev[projectId][field],
-      },
-    }));
+  const handleCheckboxChange = async (projectId, field) => {
+    // Yeni state'i hazırla
+    setProjectStates((prev) => {
+      const newValue = !prev[projectId][field];
+      const updated = {
+        ...prev,
+        [projectId]: {
+          ...prev[projectId],
+          [field]: newValue,
+        },
+      };
+      return updated;
+    });
+
+    // Backend field mapping
+    const fieldMap = {
+      personnel: 'personelGirisi',
+      phase: 'fazYapimAsamasi',
+      finish: 'bitirmeTalebi',
+    };
+    const backendField = fieldMap[field];
+    if (!backendField) return;
+
+    // PATCH isteği gönder
+    try {
+      const res = await fetch(`https://server.lunaproject.com.tr/projects/${projectId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${bearerKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ [backendField]: projectStates[projectId] ? !projectStates[projectId][field] : true }),
+      });
+      if (!res.ok) {
+        throw new Error('Sunucuya kaydedilemedi.');
+      }
+    } catch (err) {
+      alert('Değişiklik kaydedilemedi: ' + err.message);
+    }
   };
 
   // Progress hesaplama
