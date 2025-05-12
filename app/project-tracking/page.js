@@ -14,16 +14,17 @@ export default function ProjectTracking() {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const response = await fetch(
-        'https://server.lunaproject.com.tr/projects',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${bearerKey}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      try {
+        const response = await fetch(
+          'https://server.lunaproject.com.tr/projects',
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${bearerKey}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
       const data = await response.json();
       const filteredProjects = data._embedded.projects.filter(
@@ -43,7 +44,9 @@ export default function ProjectTracking() {
       setProjectStates(initialStates);
     };
 
-    fetchProjects();
+    if (bearerKey && user) {
+      fetchProjects();
+    }
   }, [bearerKey, user]);
 
   // Proje satırına tıklama
@@ -102,7 +105,7 @@ export default function ProjectTracking() {
   };
 
   return (
-    <div className=" p-4 pt-16 px-32 mx-auto bg-[#eff8fb] h-[100vh] ">
+    <div className=" p-4 pt-16 px-32 mx-auto bg-[#EDF7FA] h-[100vh] ">
       <NewSidebar /> {/* Sidebar componentini ekleyin */}
       <h1 className="text-[38px] font-bold text-[#0000cd] mb-12 ">
         Proje Takip ve Talepler

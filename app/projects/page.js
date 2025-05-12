@@ -7,11 +7,31 @@ import NewSidebar from '../components/NewSideBar/page';
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
-  const { bearerKey, user } = useAuth(); // Make sure to extract user from context
+  const { bearerKey, user } = useAuth();
+  
+  console.log('Projects sayfası yüklenirken user değeri:', user);
+  console.log('Projects sayfası yüklenirken bearerKey değeri:', bearerKey ? 'Bearer var' : 'Bearer yok');
+
+  // Debug için manuel filtreleme fonksiyonu
+  const filterUserProjects = (allProjects, currentUser) => {
+    console.log('Filtreleme fonksiyonu çağrıldı:', { 
+      toplamProje: allProjects.length, 
+      user: currentUser,
+      userType: typeof currentUser
+    });
+    
+    return allProjects.filter(project => {
+      const isMatch = project.userId === currentUser;
+      console.log(`Proje ID: ${project.projectId}, UserId: ${project.userId} (${typeof project.userId}), User: ${currentUser} (${typeof currentUser}), Eşleşiyor mu: ${isMatch}`);
+      return isMatch;
+    });
+  };
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
+        console.log('Fetch başladı, user değeri:', user);
+        
         const response = await fetch(
           'https://server.lunaproject.com.tr/projects',
           {
@@ -26,27 +46,42 @@ export default function Projects() {
           throw new Error('Projeler yüklenemedi');
         }
         const data = await response.json();
-
-        // Filter projects to only include those with matching userId
-        const userProjects = data._embedded.projects.filter(
-          (project) => project.userId === user // Make sure `user` has the userId property
-        );
-
-        setProjects(userProjects); // Set the filtered projects
+        console.log('Tüm API yanıtı:', data);
+        
+        if (data._embedded && data._embedded.projects) {
+          const allProjects = data._embedded.projects;
+          console.log(`API'den ${allProjects.length} proje alındı`);
+          
+          // Manuel filtreleme fonksiyonunu kullan
+          const userProjects = filterUserProjects(allProjects, user);
+          
+          console.log(`Filtreleme sonrası ${userProjects.length} proje kaldı`);
+          setProjects(userProjects);
+        } else {
+          console.error('Beklenmeyen API yanıtı:', data);
+          setProjects([]);
+        }
       } catch (error) {
         console.error('Projeler yüklenirken hata oluştu:', error);
+        setProjects([]);
       }
     };
 
-    fetchProjects();
-  }, [bearerKey, user]); // Dependency array includes bearerKey and user
+    if (bearerKey && user) {
+      console.log('Fetch başlatılıyor...');
+      fetchProjects();
+    } else {
+      console.log('Fetch atlandı çünkü:', { bearerVar: !!bearerKey, userVar: !!user });
+      setProjects([]);
+    }
+  }, [bearerKey, user]);
 
   return (
-    <div className="p-4 pt-16 bg-[#eff8fb] px-32 h-[100vh] relative">
+    <div className="p-4 pt-16 bg-[#EDF7FA] px-32 min-h-screen">
       <NewSidebar />
       <div className="flex justify-between items-center mb-16">
         <h1 className="text-[40px] font-bold text-[#0000cd]">Projelerim</h1>
-        <select className="p-2 border-2 rounded text-black bg-[#eff8fb] border-[#0000cd]">
+        <select className="p-2 border-2 rounded text-black bg-[#EDF7FA] border-[#0000cd]">
           <option value="" disabled hidden selected>
             Sırala
           </option>
@@ -63,18 +98,15 @@ export default function Projects() {
           <span>Başlangıç Tarihi</span>
           <span>Bitiş Tarihi</span>
           <span>Proje Türü</span>
-          <span></span>
+          <span>Detay</span>
         </div>
         <div className="max-h-[600px] h-[75vh] overflow-y-auto">
           {/* Kartlar */}
-          {projects.map((project) => (
-            <Link
-              href={`/project-detail/${project._links.self.href
-                .split('/')
-                .pop()}`}
-              key={project._links.self.href}
-            >
-              <div className="grid grid-cols-5 mt-4 gap-4 p-4 border rounded-lg shadow-sm items-center bg-[#0000cd] text-[white] text-center cursor-pointer hover:bg-[#0000cd] transition">
+          {projects.map((project) => {
+            const projectId = project._links.self.href.split('/').pop();
+            
+            return (
+              <div key={project._links.self.href} className="grid grid-cols-5 mt-4 gap-4 p-4 border rounded-lg shadow-sm items-center bg-[#0000cd] text-[white] text-center">
                 <span className="text-lg font-semibold">
                   {project.projectName}
                 </span>
@@ -85,12 +117,14 @@ export default function Projects() {
                   {new Date(project.projectEndDate).toLocaleDateString()}
                 </span>
                 <span>{project.projectType}</span>
-                <span className="flex justify-end">
-                  <RiArrowRightDoubleFill color="#fff" size={30} />
+                <span className="flex justify-center">
+                  <Link href={`/project-detail/${projectId}`}>
+                    <RiArrowRightDoubleFill color="#fff" size={30} className="cursor-pointer hover:opacity-80" />
+                  </Link>
                 </span>
               </div>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

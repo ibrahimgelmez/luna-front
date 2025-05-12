@@ -3,21 +3,25 @@ import React, { useState, useEffect } from 'react';
 import NewSidebar from '../components/NewSideBar/page';
 import { FaBell } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
+import Link from 'next/link';
 
 const Card = ({ title, projects, todos, onDeleteTodo }) => {
   return (
-    <div className="bg-white h-[300px] p-5 rounded shadow overflow-auto">
+    <div className="bg-white h-[700px] p-5 rounded shadow overflow-auto">
       <h4 className="text-xl font-semibold text-[#0000cd] mb-3">{title}</h4>
       {projects &&
-        projects.map((project, index) => (
-          <a
-            key={index}
-            href="#"
-            className="block text-blue-600 font-semibold hover:underline mb-2"
-          >
-            {project.projectName} - {project.stbCode}
-          </a>
-        ))}
+        projects.map((project, index) => {
+          const projectId = project._links?.self?.href?.split('/').pop();
+          return (
+            <Link
+              key={index}
+              href={projectId ? `/project-detail/${projectId}` : '#'}
+              className="block text-blue-600 font-semibold hover:underline mb-2"
+            >
+              {project.projectName} {project.stbCode && `- ${project.stbCode}`}
+            </Link>
+          );
+        })}
       {todos && todos.length > 0 ? (
         todos.map((todo, index) => (
           <div
@@ -50,7 +54,9 @@ const Card = ({ title, projects, todos, onDeleteTodo }) => {
 const Homepage = () => {
   const [todos, setTodos] = useState([]);
   const [projects, setProjects] = useState([]);
-  const { bearerKey } = useAuth();
+  const [completedProjects, setCompletedProjects] = useState([]);
+  const { bearerKey, user } = useAuth();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -92,10 +98,26 @@ const Homepage = () => {
         );
         if (!response.ok) throw new Error('Proje verileri alınamadı');
         const data = await response.json();
+        
+        console.log('Tüm projeler:', data._embedded.projects);
+        console.log('Mevcut kullanıcı:', user);
+        
+        // Sadece kullanıcıya ait devam eden projeleri filtreleme
         const ongoingProjects = data._embedded.projects.filter(
-          (project) => project.projectStatus === 'Devam Ediyor'
+          (project) => project.projectStatus === 'Devam Ediyor' && project.userId === user
         );
+        
+        // Tamamlanmış projeleri filtreleme
+        const userCompletedProjects = data._embedded.projects.filter(
+          (project) => project.projectStatus === 'completed' && project.userId === user
+        );
+        
+        console.log('Devam eden projeler:', ongoingProjects);
+        console.log('Tamamlanan projeler:', userCompletedProjects);
+        
+        // Tüm projeleri göster, herhangi bir limit olmadan
         setProjects(ongoingProjects);
+        setCompletedProjects(userCompletedProjects);
       } catch (error) {
         console.error('Proje verileri alınırken hata oluştu:', error);
       }
@@ -136,11 +158,11 @@ const Homepage = () => {
   };
 
   return (
-    <div className="flex h-full w-full bg-gray-100">
+    <div className="flex h-full w-full bg-[#EDF7FA]">
       <div className="w-[5%] h-full">
         <NewSidebar />
       </div>
-      <div className="flex-1 p-6 pt-8 px-32 mx-auto bg-gray-100 h-full">
+      <div className="flex-1 p-6 pt-8 px-32 mx-auto bg-[#EDF7FA] h-full">
         <div className="flex h-full">
           <div className="w-full p-5 flex flex-col">
             <div className="flex justify-between items-center relative">
@@ -148,11 +170,46 @@ const Homepage = () => {
                 Hoşgeldiniz!
               </h1>
               <div className="absolute top-4 right-4">
-                <FaBell className="text-3xl text-[#0000cd] cursor-pointer hover:text-[#0000cd]" />
+                <div className="relative">
+                  <FaBell 
+                    className="text-3xl text-[#0000cd] cursor-pointer hover:text-[#0000cd]" 
+                    onClick={() => setShowNotifications(!showNotifications)}
+                  />
+                  {todos.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                      {todos.length}
+                    </span>
+                  )}
+                  
+                  {showNotifications && (
+                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-10 overflow-hidden">
+                      <div className="py-2 px-3 bg-[#0000cd] text-white font-semibold">
+                        Bugünkü İşleriniz
+                      </div>
+                      <div className="max-h-60 overflow-y-auto">
+                        {todos.length > 0 ? (
+                          todos.map((todo, index) => (
+                            <div key={index} className="border-b border-gray-100 py-2 px-3 hover:bg-gray-50">
+                              <div className="flex items-center">
+                                <span className={`${todo.checked ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+                                  {todo.todo} - {todo.date}
+                                </span>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="py-3 px-3 text-gray-500 text-center">
+                            Bugün için planlanmış bir iş yok
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <hr className="my-4 border-gray-100" />
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <Card title="Devam Eden Projeler" projects={projects} />
               <Card
                 title="Yapılması Gerekenler"
@@ -161,20 +218,9 @@ const Homepage = () => {
               />
               <Card
                 title="Tamamlanan Projeler"
-                projects={['Proje 1', 'Proje 2', 'Proje 3']}
+                projects={completedProjects}
               />
             </div>
-            <footer className="mt-auto py-5 text-center border-t border-blue-900">
-              <div className="flex justify-center items-center space-x-3">
-                <img src="logo.png" alt="Şirket Logosu" className="w-12 h-12" />
-                <h3 className="text-lg font-semibold text-blue-900">
-                  Şirket Adı
-                </h3>
-              </div>
-              <p className="text-blue-900 text-sm mt-2">
-                Şirket Tanıtım Yazısı
-              </p>
-            </footer>
           </div>
         </div>
       </div>

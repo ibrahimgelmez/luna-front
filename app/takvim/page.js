@@ -118,7 +118,7 @@ export default function Home() {
   return (
     <div className="flex">
       <NewSidebar />
-      <div className="flex h-screen w-screen bg-gray-100 p-2 pt-20">
+      <div className="flex h-screen w-screen bg-[#EDF7FA] p-2 pt-20">
         <div className="w-1/3 p-4 bg-[#0000cd] shadow-lg rounded-lg h-full overflow-auto">
           <h2 className="text-2xl font-bold text-white mb-3 mt-4">Notlar</h2>
           {selectedDate ? (
@@ -127,7 +127,7 @@ export default function Home() {
                 Not Ekle ({selectedDate})
               </h3>
               <textarea
-                className="w-full p-2 border rounded-lg text-base"
+                className="w-full p-2 border rounded-lg text-base placeholder-black text-black"
                 placeholder="Bugün için bir not ekle..."
                 value={noteInput}
                 onChange={(e) => setNoteInput(e.target.value)}
