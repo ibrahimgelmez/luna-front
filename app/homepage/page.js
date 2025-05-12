@@ -4,6 +4,19 @@ import NewSidebar from '../components/NewSideBar/page';
 import { FaBell } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+// dayjs eklentilerini yükle
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(customParseFormat);
+dayjs.locale('tr');
+
+// Yerel zaman dilimini ayarla
+const localTimezone = 'Europe/Istanbul';
 
 const Card = ({ title, projects, todos, onDeleteTodo }) => {
   return (
@@ -23,30 +36,33 @@ const Card = ({ title, projects, todos, onDeleteTodo }) => {
           );
         })}
       {todos && todos.length > 0 ? (
-        todos.map((todo, index) => (
-          <div
-            key={index}
-            className="flex items-center mb-2 cursor-pointer"
-            onClick={() => onDeleteTodo(index, todo.id)}
-          >
-            <input
-              type="checkbox"
-              checked={todo.checked}
-              readOnly
-              className="mr-2 h-4 w-4 text-[#0000cd] border-gray-300 rounded"
-            />
-            <span
-              className={`text-black ${
-                todo.checked ? 'line-through text-gray-500' : ''
-              }`}
+        <div className="mt-3">
+          <p className="text-sm text-gray-500 mb-2">Bugün için {todos.length} adet yapılacak işiniz var</p>
+          {todos.map((todo, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-2 mb-2 rounded bg-gray-50 hover:bg-gray-100"
             >
-              {todo.todo} - {todo.date}
-            </span>
-          </div>
-        ))
-      ) : (
-        <></>
-      )}
+              <div className="flex items-center flex-1">
+                <span className="text-black">
+                  {todo.todo}
+                </span>
+              </div>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteTodo(index, todo.id);
+                }}
+                className="text-xs text-red-500 hover:text-red-700 ml-2"
+              >
+                Sil
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : todos ? (
+        <p className="text-sm text-gray-500">Bugün için takvimde planlanmış bir iş yok</p>
+      ) : null}
     </div>
   );
 };
@@ -59,7 +75,7 @@ const Homepage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = dayjs().tz(localTimezone).format('YYYY-MM-DD');
 
     const fetchTodos = async () => {
       try {
@@ -75,12 +91,27 @@ const Homepage = () => {
         );
         if (!response.ok) throw new Error('Todo verileri alınamadı');
         const data = await response.json();
-        const todayTodos = data._embedded.calendars.filter(
-          (todo) => todo.date === today
-        );
-        setTodos(todayTodos);
+        
+        if (data && data._embedded && data._embedded.calendars) {
+          // Bugünün tarihine göre takvimden yapılacak işleri filtrele
+          console.log('Tüm takvim verileri:', data._embedded.calendars);
+          console.log('Bugünün tarihi:', today);
+          
+          const todayTodos = data._embedded.calendars.filter(todo => {
+            // GMT formatından temizleyerek sadece tarih kısmını al
+            const todoDate = todo.date.split('T')[0];
+            return todoDate === today && todo.userId === user;
+          });
+          
+          console.log('Bugüne ait filtrelenmiş işler:', todayTodos);
+          setTodos(todayTodos);
+        } else {
+          console.error('API yanıtı beklenen formatta değil:', data);
+          setTodos([]);
+        }
       } catch (error) {
         console.error('Todo verileri alınırken hata oluştu:', error);
+        setTodos([]);
       }
     };
 
@@ -130,15 +161,18 @@ const Homepage = () => {
   }, [bearerKey]);
 
   const handleDeleteTodo = async (index, id) => {
-    const confirmDelete = window.confirm(
-      "Bu todo'yu silmek istediğinize emin misiniz?"
-    );
-    if (!confirmDelete) return;
-
-    const updatedTodos = todos.filter((_, i) => i !== index);
-    setTodos(updatedTodos);
-
+    // Silme işlemi için onay al
+    if (!window.confirm("Bu işi silmek istediğinize emin misiniz?")) {
+      return;
+    }
+    
     try {
+      // Önce UI'da değişikliği yap (daha akıcı kullanıcı deneyimi için)
+      const updatedTodos = [...todos];
+      updatedTodos.splice(index, 1);
+      setTodos(updatedTodos);
+
+      // Ardından API'ye silme isteği gönder
       const response = await fetch(
         `https://server.lunaproject.com.tr/calendars/${id}`,
         {
@@ -149,11 +183,35 @@ const Homepage = () => {
           },
         }
       );
-      if (!response.ok) throw new Error('Todo silinirken hata oluştu');
-      console.log('Todo başarıyla silindi');
+      
+      if (!response.ok) {
+        throw new Error('Todo silinirken hata oluştu');
+      }
+      
+      console.log('İş başarıyla silindi');
     } catch (error) {
-      console.error('Todo silinirken hata oluştu:', error);
-      setTodos(todos); // Hata olursa geri yükle
+      console.error('İş silinirken hata oluştu:', error);
+      // Hata durumunda orijinal verileri geri yükle
+      const today = dayjs().tz(localTimezone).format('YYYY-MM-DD');
+      const response = await fetch('https://server.lunaproject.com.tr/calendars', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${bearerKey}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data._embedded && data._embedded.calendars) {
+          const todayTodos = data._embedded.calendars.filter(todo => {
+            // GMT formatından temizleyerek sadece tarih kısmını al
+            const todoDate = todo.date.split('T')[0];
+            return todoDate === today && todo.userId === user;
+          });
+          setTodos(todayTodos);
+        }
+      }
     }
   };
 
@@ -183,25 +241,39 @@ const Homepage = () => {
                   
                   {showNotifications && (
                     <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-10 overflow-hidden">
-                      <div className="py-2 px-3 bg-[#0000cd] text-white font-semibold">
-                        Bugünkü İşleriniz
+                      <div className="py-2 px-3 bg-[#0000cd] text-white font-semibold flex justify-between items-center">
+                        <span>Takvimden Bugünkü İşleriniz</span>
+                        <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                          {todos.length}
+                        </span>
                       </div>
                       <div className="max-h-60 overflow-y-auto">
                         {todos.length > 0 ? (
                           todos.map((todo, index) => (
                             <div key={index} className="border-b border-gray-100 py-2 px-3 hover:bg-gray-50">
-                              <div className="flex items-center">
-                                <span className={`${todo.checked ? 'line-through text-gray-500' : 'text-gray-800'}`}>
-                                  {todo.todo} - {todo.date}
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-800 flex-1">
+                                  {todo.todo}
                                 </span>
+                                <button 
+                                  onClick={() => handleDeleteTodo(index, todo.id)}
+                                  className="ml-2 text-xs text-red-500 hover:text-red-700"
+                                >
+                                  Sil
+                                </button>
                               </div>
                             </div>
                           ))
                         ) : (
                           <div className="py-3 px-3 text-gray-500 text-center">
-                            Bugün için planlanmış bir iş yok
+                            Bugün için takvimde planlanmış bir iş yok
                           </div>
                         )}
+                      </div>
+                      <div className="py-2 px-3 bg-gray-100 text-center">
+                        <Link href="/takvim" className="text-[#0000cd] hover:underline text-sm">
+                          Takvimi Görüntüle
+                        </Link>
                       </div>
                     </div>
                   )}
@@ -212,7 +284,7 @@ const Homepage = () => {
             <div className="grid grid-cols-3 gap-4">
               <Card title="Devam Eden Projeler" projects={projects} />
               <Card
-                title="Yapılması Gerekenler"
+                title="Takvimden Bugünkü İşler"
                 todos={todos}
                 onDeleteTodo={handleDeleteTodo}
               />

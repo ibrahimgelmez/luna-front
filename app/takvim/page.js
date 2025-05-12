@@ -2,23 +2,41 @@
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/tr';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import NewSidebar from '../components/NewSideBar/page';
 import { useAuth } from '@/context/AuthContext';
 
+// dayjs eklentilerini yükle
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(customParseFormat);
 dayjs.locale('tr');
+
+// Yerel zaman dilimini ayarla
+const localTimezone = 'Europe/Istanbul';
 
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [notes, setNotes] = useState({});
-  const [currentMonth, setCurrentMonth] = useState(dayjs().startOf('month'));
+  const [currentMonth, setCurrentMonth] = useState(dayjs().tz(localTimezone).startOf('month'));
   const [noteInput, setNoteInput] = useState('');
-  const { bearerKey } = useAuth();
+  const { bearerKey, user } = useAuth();
 
   const weekDays = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Pzr'];
 
   useEffect(() => {
     const fetchNotes = async () => {
       try {
+        // Eğer kullanıcı kimliği yoksa hiçbir şey yapma
+        if (!user) {
+          console.error('Kullanıcı kimliği bulunamadı. Takvim verileri yüklenemedi.');
+          return;
+        }
+        
+        console.log('Takvim verileri şu kullanıcı için yükleniyor:', user);
+        
         const response = await fetch(
           'https://server.lunaproject.com.tr/calendars',
           {
@@ -29,80 +47,156 @@ export default function Home() {
             },
           }
         );
+        
         if (!response.ok) throw new Error('Notlar alınamadı');
+        
         const data = await response.json();
         const notesByDate = {};
-        data._embedded.calendars.forEach((note) => {
-          if (!notesByDate[note.date]) notesByDate[note.date] = [];
-          notesByDate[note.date].push({ id: note.id, todo: note.todo });
+        
+        if (!data._embedded || !data._embedded.calendars) {
+          console.error('API yanıtı beklenen formatta değil:', data);
+          return;
+        }
+        
+        // Sadece geçerli kullanıcıya ait notları filtrele
+        const userNotes = data._embedded.calendars.filter(note => {
+          // Notun userId'si tanımlı değilse veya geçerli kullanıcıyla eşleşmiyorsa filtrele
+          return note.userId && note.userId === user;
         });
+        
+        console.log('Kullanıcının notları:', userNotes);
+        
+        userNotes.forEach((note) => {
+          // GMT olmadan sadece tarih kısmını al
+          const localDate = note.date.split('T')[0];
+          if (!notesByDate[localDate]) notesByDate[localDate] = [];
+          notesByDate[localDate].push({ id: note.id, todo: note.todo, checked: note.checked });
+        });
+        
         setNotes(notesByDate);
       } catch (error) {
         console.error('Notlar alınırken hata oluştu:', error);
       }
     };
 
-    if (bearerKey) fetchNotes();
-  }, [bearerKey]);
+    if (bearerKey && user) {
+      fetchNotes();
+    } else {
+      console.warn('Oturum veya kullanıcı bilgisi eksik. Notlar alınamıyor.');
+    }
+  }, [bearerKey, user]);
 
   const saveNote = async () => {
-    if (selectedDate && noteInput.trim() !== '') {
-      try {
-        const response = await fetch(
-          'https://server.lunaproject.com.tr/calendars',
-          {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${bearerKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              date: selectedDate,
-              userId: 'ibrahim', // Bu, dinamik olabilir (useAuth'tan alınabilir)
-              todo: noteInput,
-              checked: false,
-            }),
-          }
-        );
-        if (!response.ok) throw new Error('Not eklenemedi');
-        const newNote = await response.json();
-        const updatedNotes = {
-          ...notes,
-          [selectedDate]: notes[selectedDate]
-            ? [...notes[selectedDate], { id: newNote.id, todo: noteInput }]
-            : [{ id: newNote.id, todo: noteInput }],
-        };
-        setNotes(updatedNotes);
-        setNoteInput('');
-      } catch (error) {
-        console.error('Not eklenirken hata oluştu:', error);
+    if (!selectedDate || noteInput.trim() === '') {
+      return;
+    }
+    
+    // Kullanıcı kimliği kontrolü
+    if (!user) {
+      console.error('Kullanıcı kimliği bulunamadı. Not eklenemiyor.');
+      return;
+    }
+    
+    // Yerel saat dilimine göre tarih oluştur
+    const localDate = selectedDate;
+    
+    try {
+      console.log(`${localDate} tarihine not ekleniyor:`, noteInput);
+      
+      const response = await fetch(
+        'https://server.lunaproject.com.tr/calendars',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${bearerKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            date: localDate, // Zaman dilimi olmadan sadece tarih gönder
+            userId: user,
+            todo: noteInput,
+            checked: false,
+          }),
+        }
+      );
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Not eklenemedi: ${errorText}`);
       }
+      
+      const newNote = await response.json();
+      console.log('Yeni not başarıyla eklendi:', newNote);
+      
+      const updatedNotes = {
+        ...notes,
+        [selectedDate]: notes[selectedDate]
+          ? [...notes[selectedDate], { id: newNote.id, todo: noteInput, checked: false }]
+          : [{ id: newNote.id, todo: noteInput, checked: false }],
+      };
+      
+      setNotes(updatedNotes);
+      setNoteInput('');
+    } catch (error) {
+      console.error('Not eklenirken hata oluştu:', error);
+      alert('Not eklenirken bir hata oluştu. Lütfen tekrar deneyin.');
     }
   };
 
   const deleteNote = async (index) => {
-    if (selectedDate && notes[selectedDate] && notes[selectedDate][index]) {
-      const noteId = notes[selectedDate][index].id;
-      try {
-        const response = await fetch(
-          `https://server.lunaproject.com.tr/calendars/${noteId}`,
-          {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${bearerKey}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        if (!response.ok) throw new Error('Not silinirken hata oluştu');
-        const updatedNotes = { ...notes };
-        updatedNotes[selectedDate].splice(index, 1);
-        if (updatedNotes[selectedDate].length === 0)
-          delete updatedNotes[selectedDate];
-        setNotes(updatedNotes);
-      } catch (error) {
-        console.error('Not silinirken hata oluştu:', error);
+    // Seçili tarih, notlar ve istenen indeks kontrolü
+    if (!selectedDate || !notes[selectedDate] || !notes[selectedDate][index]) {
+      console.error('Silinecek not bulunamadı.');
+      return;
+    }
+    
+    // Kullanıcı kimliği kontrolü
+    if (!user || !bearerKey) {
+      console.error('Kullanıcı kimliği veya oturum bilgisi bulunamadı. Not silinemiyor.');
+      return;
+    }
+    
+    const noteId = notes[selectedDate][index].id;
+    const noteContent = notes[selectedDate][index].todo;
+    
+    // Silme işlemi için onay
+    if (!window.confirm(`"${noteContent}" notunu silmek istediğinize emin misiniz?`)) {
+      return;
+    }
+    
+    try {
+      console.log(`${selectedDate} tarihindeki "${noteContent}" notu siliniyor...`);
+      
+      const response = await fetch(
+        `https://server.lunaproject.com.tr/calendars/${noteId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${bearerKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Not silinirken hata oluştu: ${errorText}`);
       }
+      
+      console.log('Not başarıyla silindi');
+      
+      // UI'ı güncelle
+      const updatedNotes = { ...notes };
+      updatedNotes[selectedDate].splice(index, 1);
+      
+      if (updatedNotes[selectedDate].length === 0) {
+        delete updatedNotes[selectedDate];
+      }
+      
+      setNotes(updatedNotes);
+    } catch (error) {
+      console.error('Not silinirken hata oluştu:', error);
+      alert('Not silinirken bir hata oluştu. Lütfen tekrar deneyin.');
     }
   };
 
@@ -112,8 +206,13 @@ export default function Home() {
     setNoteInput('');
   };
 
+  // Yerel zaman dilimine göre ay içerisindeki gün sayısını hesapla
   const daysInMonth = currentMonth.daysInMonth();
+  // Yerel zaman dilimine göre ayın ilk gününü hesapla
   const firstDayOfMonth = currentMonth.startOf('month').day() || 7;
+
+  // Bugünün tarihini yerel formatta al
+  const today = dayjs().tz(localTimezone).format('YYYY-MM-DD');
 
   return (
     <div className="flex">
@@ -137,7 +236,7 @@ export default function Home() {
                   onClick={saveNote}
                   className="px-4 py-1 bg-green-600 text-white rounded-lg hover:bg-green-500 text-sm"
                 >
-                  Kaydet ✅
+                  Kaydet
                 </button>
               </div>
               {Array.isArray(notes[selectedDate]) &&
@@ -159,7 +258,7 @@ export default function Home() {
                             onClick={() => deleteNote(index)}
                             className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-400 text-xs"
                           >
-                            Sil ❌
+                            Sil
                           </button>
                         </li>
                       ))}
@@ -169,7 +268,7 @@ export default function Home() {
             </>
           ) : (
             <p className="text-white text-sm">
-              Bir gün seçerek not ekleyebilirsin. 📌
+              Bir gün seçerek not ekleyebilirsin.
             </p>
           )}
         </div>
@@ -206,9 +305,11 @@ export default function Home() {
               <div key={`empty-${i}`} className="border w-full h-[80px]" />
             ))}
             {Array.from({ length: daysInMonth }).map((_, i) => {
+              // Yerel zaman dilimine göre tarihi formatlama
               const date = currentMonth.date(i + 1).format('YYYY-MM-DD');
               const dayOfWeek = currentMonth.date(i + 1).day();
               const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+              const isToday = date === today;
 
               return (
                 <div
@@ -216,6 +317,8 @@ export default function Home() {
                   className={`border w-full h-[80px] flex flex-col items-center justify-center cursor-pointer rounded-lg text-sm font-semibold transition-all duration-200 ${
                     selectedDate === date
                       ? 'bg-blue-500 text-white scale-105'
+                      : isToday
+                      ? 'bg-green-600 text-white'
                       : isWeekend
                       ? 'bg-red-600 text-white'
                       : 'bg-[#0000cd] text-white'
@@ -228,7 +331,7 @@ export default function Home() {
                   <span className="text-base font-bold">{i + 1}</span>
                   {Array.isArray(notes[date]) && notes[date].length > 0 && (
                     <div className="text-xs bg-white text-black p-1 mt-1 rounded-lg overflow-hidden max-h-[30px] w-[90%] text-center">
-                      {notes[date].length} not 📌
+                      {notes[date].length} not
                     </div>
                   )}
                 </div>
