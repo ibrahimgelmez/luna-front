@@ -7,7 +7,8 @@ import NewSidebar from '../components/NewSideBar/page';
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
-  const { bearerKey, user } = useAuth(); // Make sure to extract user from context
+  const [sortOption, setSortOption] = useState('');
+  const { bearerKey, user } = useAuth();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -29,31 +30,59 @@ export default function Projects() {
 
         // Filter projects to only include those with matching userId
         const userProjects = data._embedded.projects.filter(
-          (project) => project.userId === user // Make sure `user` has the userId property
+          (project) => project.userId === user
         );
 
-        setProjects(userProjects); // Set the filtered projects
+        setProjects(userProjects);
       } catch (error) {
         console.error('Projeler yüklenirken hata oluştu:', error);
       }
     };
 
     fetchProjects();
-  }, [bearerKey, user]); // Dependency array includes bearerKey and user
+  }, [bearerKey, user]);
+
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+  };
+
+  const getProjectProgress = (project) => {
+    if (project.personelGirisi && project.fazYapimAsamasi && project.bitirmeTalebi) return 100;
+    if (project.personelGirisi && project.fazYapimAsamasi) return 75;
+    if (project.personelGirisi) return 25;
+    return 0;
+  };
+
+  const getSortedProjects = () => {
+    if (!sortOption) return projects;
+
+    return [...projects].sort((a, b) => {
+      if (sortOption === 'date') {
+        // Bitiş tarihine göre sıralama (yakın tarihe göre)
+        return new Date(a.projectEndDate) - new Date(b.projectEndDate);
+      } else if (sortOption === 'progress') {
+        // Bitme yüzdesine göre sıralama (yüksekten düşüğe)
+        return getProjectProgress(b) - getProjectProgress(a);
+      }
+      return 0;
+    });
+  };
 
   return (
     <div className="p-4 pt-16 bg-[#eff8fb] px-32 h-[100vh] relative">
       <NewSidebar />
       <div className="flex justify-between items-center mb-16">
         <h1 className="text-[40px] font-bold text-[#0000cd]">Projelerim</h1>
-        <select className="p-2 border-2 rounded text-black bg-[#eff8fb] border-[#0000cd]">
-          <option value="" disabled hidden selected>
+        <select 
+          className="p-2 border-2 rounded text-black bg-[#eff8fb] border-[#0000cd]"
+          value={sortOption}
+          onChange={handleSortChange}
+        >
+          <option value="" disabled hidden>
             Sırala
           </option>
-          <option className="text-[#cae1ff]">Yakın Tarihe Göre Sırala</option>
-          <option className="text-[#cae1ff]">
-            Bitme Yüzdesine Göre Sırala
-          </option>
+          <option value="date" className="text-black">Yakın Tarihe Göre Sırala</option>
+          <option value="progress" className="text-black">Bitme Yüzdesine Göre Sırala</option>
         </select>
       </div>
       <div className="space-y-4">
@@ -67,7 +96,7 @@ export default function Projects() {
         </div>
         <div className="max-h-[600px] h-[75vh] overflow-y-auto">
           {/* Kartlar */}
-          {projects.map((project) => (
+          {getSortedProjects().map((project) => (
             <Link
               href={`/project-detail/${project._links.self.href
                 .split('/')
