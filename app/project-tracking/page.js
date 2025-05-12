@@ -52,9 +52,6 @@ export default function ProjectTracking() {
     if (bearerKey && user) {
       fetchProjects();
     }
-    if (bearerKey && user) {
-      fetchProjects();
-    }
   }, [bearerKey, user]);
 
   const handleExpand = (projectId) => {
