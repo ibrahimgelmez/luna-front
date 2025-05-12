@@ -14,13 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: 'Google Calendar App',
-  description: 'Google Takvim API ile Next.js entegrasyonu',
+  title: 'Luna',
+  description: 'Luna Proje Yönetim Platformu',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="tr">
       <body>
         <Providers>
           <main className="">{children}</main>

@@ -57,6 +57,16 @@ export default function ProjectDetail() {
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
+    
+    // Özel durum: projectStatus checkbox'ı için
+    if (name === 'projectStatusCheckbox') {
+      setFormData(prev => ({ 
+        ...prev, 
+        projectStatus: checked ? 'completed' : 'Devam Ediyor' 
+      }));
+      return;
+    }
+    
     setFormData(prev => ({ ...prev, [name]: checked }));
   };
 
@@ -226,16 +236,24 @@ export default function ProjectDetail() {
                   <label className="block text-lg font-semibold text-[#0000cd] mb-2">
                     Proje Durumu
                   </label>
-                  <select
-                    name="projectStatus"
-                    value={formData.projectStatus}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded text-black"
-                    required
-                  >
-                    <option value="Devam Ediyor">Devam Ediyor</option>
-                    <option value="completed">Tamamlandı</option>
-                  </select>
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="projectStatusCheckbox"
+                      checked={formData.projectStatus === 'completed'}
+                      onChange={handleCheckboxChange}
+                      className="mr-2 h-4 w-4"
+                      id="projectStatusCheckbox"
+                    />
+                    <label htmlFor="projectStatusCheckbox" className="text-black">
+                      Proje tamamlandı olarak işaretle
+                    </label>
+                  </div>
+                  <input 
+                    type="hidden" 
+                    name="projectStatus" 
+                    value={formData.projectStatus} 
+                  />
                 </div>
               </div>
 
@@ -446,7 +464,13 @@ export default function ProjectDetail() {
               <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
                 Proje Durumu
               </h2>
-              <p className="text-[#0000cd]">{project.projectStatus}</p>
+              <p className={`inline-block px-3 py-1 rounded-full ${
+                project.projectStatus === 'completed' 
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-yellow-100 text-yellow-800'
+              }`}>
+                {project.projectStatus === 'completed' ? 'Tamamlandı' : 'Devam Ediyor'}
+              </p>
             </div>
 
             {/* Sağ sütun */}
