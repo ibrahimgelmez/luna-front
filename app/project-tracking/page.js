@@ -49,7 +49,12 @@ export default function ProjectTracking() {
       }
     };
 
-    fetchProjects();
+    if (bearerKey && user) {
+      fetchProjects();
+    }
+    if (bearerKey && user) {
+      fetchProjects();
+    }
   }, [bearerKey, user]);
 
   const handleExpand = (projectId) => {

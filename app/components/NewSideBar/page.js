@@ -48,7 +48,9 @@ export default function NewSidebar() {
                 <Link href="/homepage" className="hover:text-gray-400 text-lg">
                   Anasayfa
                 </Link>
-                <RiArrowRightDoubleFill color="#ffffff" size={26} />
+                <Link href="/homepage">
+                  <RiArrowRightDoubleFill color="#ffffff" size={26} className="cursor-pointer hover:opacity-80" />
+                </Link>
               </li>
               <li className="mb-12 flex items-center justify-between">
                 <Link
@@ -57,20 +59,26 @@ export default function NewSidebar() {
                 >
                   Proje Ekle
                 </Link>
-                <RiArrowRightDoubleFill color="#ffffff" size={26} />
+                <Link href="/add-project">
+                  <RiArrowRightDoubleFill color="#ffffff" size={26} className="cursor-pointer hover:opacity-80" />
+                </Link>
               </li>
               <li className="mb-12 flex items-center justify-between">
                 <Link href="/projects" className="hover:text-gray-400 text-lg">
                   Projelerim
                 </Link>
-                <RiArrowRightDoubleFill color="#ffffff" size={26} />
+                <Link href="/projects">
+                  <RiArrowRightDoubleFill color="#ffffff" size={26} className="cursor-pointer hover:opacity-80" />
+                </Link>
               </li>
 
               <li className="mb-12 flex items-center justify-between">
                 <Link href="/takvim" className="hover:text-gray-400 text-lg">
                   Takvim
                 </Link>
-                <RiArrowRightDoubleFill color="#ffffff" size={26} />
+                <Link href="/takvim">
+                  <RiArrowRightDoubleFill color="#ffffff" size={26} className="cursor-pointer hover:opacity-80" />
+                </Link>
               </li>
               <li className="mb-12 flex items-center justify-between">
                 <Link
@@ -79,7 +87,9 @@ export default function NewSidebar() {
                 >
                   Proje Takip ve Talepler
                 </Link>
-                <RiArrowRightDoubleFill color="#ffffff" size={26} />
+                <Link href="/project-tracking">
+                  <RiArrowRightDoubleFill color="#ffffff" size={26} className="cursor-pointer hover:opacity-80" />
+                </Link>
               </li>
             </ul>
           </nav>

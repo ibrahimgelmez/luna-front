@@ -5,7 +5,7 @@ import NewSidebar from '../components/NewSideBar/page';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
-
+//z
 export default function AddProject() {
   const [formData, setFormData] = useState({
     projectName: '',
@@ -101,7 +101,7 @@ export default function AddProject() {
   };
 
   return (
-    <div className="p-6 pt-16 px-32 mx-auto bg-white">
+    <div className="p-6 pt-16 px-32 mx-auto bg-[#EDF7FA]">
       <Toaster position="top-right" reverseOrder={false} />
       <NewSidebar />
       <div className="p-5 flex flex-col h-full">

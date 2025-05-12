@@ -29,17 +29,23 @@ export default function Projects() {
         const data = await response.json();
 
         // Filter projects to only include those with matching userId
-        const userProjects = data._embedded.projects.filter(
-          (project) => project.userId === user
-        );
-
-        setProjects(userProjects);
+        if (data._embedded && data._embedded.projects) {
+          const userProjects = data._embedded.projects.filter(
+            (project) => project.userId === user
+          );
+          setProjects(userProjects);
+        } else {
+          setProjects([]);
+        }
       } catch (error) {
         console.error('Projeler yüklenirken hata oluştu:', error);
+        setProjects([]);
       }
     };
 
-    fetchProjects();
+    if (bearerKey && user) {
+      fetchProjects();
+    }
   }, [bearerKey, user]);
 
   const handleSortChange = (e) => {
@@ -69,7 +75,7 @@ export default function Projects() {
   };
 
   return (
-    <div className="p-4 pt-16 bg-[#eff8fb] px-32 h-[100vh] relative">
+    <div className="p-4 pt-16 bg-[#EDF7FA] px-32 min-h-screen">
       <NewSidebar />
       <div className="flex justify-between items-center mb-16">
         <h1 className="text-[40px] font-bold text-[#0000cd]">Projelerim</h1>
@@ -92,18 +98,15 @@ export default function Projects() {
           <span>Başlangıç Tarihi</span>
           <span>Bitiş Tarihi</span>
           <span>Proje Türü</span>
-          <span></span>
+          <span>Detay</span>
         </div>
         <div className="max-h-[600px] h-[75vh] overflow-y-auto">
           {/* Kartlar */}
-          {getSortedProjects().map((project) => (
-            <Link
-              href={`/project-detail/${project._links.self.href
-                .split('/')
-                .pop()}`}
-              key={project._links.self.href}
-            >
-              <div className="grid grid-cols-5 mt-4 gap-4 p-4 border rounded-lg shadow-sm items-center bg-[#0000cd] text-[white] text-center cursor-pointer hover:bg-[#0000cd] transition">
+          {getSortedProjects().map((project) => {
+            const projectId = project._links.self.href.split('/').pop();
+            
+            return (
+              <div key={project._links.self.href} className="grid grid-cols-5 mt-4 gap-4 p-4 border rounded-lg shadow-sm items-center bg-[#0000cd] text-[white] text-center">
                 <span className="text-lg font-semibold">
                   {project.projectName}
                 </span>
@@ -114,12 +117,14 @@ export default function Projects() {
                   {new Date(project.projectEndDate).toLocaleDateString()}
                 </span>
                 <span>{project.projectType}</span>
-                <span className="flex justify-end">
-                  <RiArrowRightDoubleFill color="#fff" size={30} />
+                <span className="flex justify-center">
+                  <Link href={`/project-detail/${projectId}`}>
+                    <RiArrowRightDoubleFill color="#fff" size={30} className="cursor-pointer hover:opacity-80" />
+                  </Link>
                 </span>
               </div>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
