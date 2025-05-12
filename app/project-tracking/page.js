@@ -25,6 +25,21 @@ export default function ProjectTracking() {
             },
           }
         );
+      try {
+        const response = await fetch(
+          'https://server.lunaproject.com.tr/projects',
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${bearerKey}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Projeler yüklenemedi');
+        }
 
       const data = await response.json();
       const filteredProjects = data._embedded.projects.filter(
@@ -44,6 +59,9 @@ export default function ProjectTracking() {
       setProjectStates(initialStates);
     };
 
+    if (bearerKey && user) {
+      fetchProjects();
+    }
     if (bearerKey && user) {
       fetchProjects();
     }
