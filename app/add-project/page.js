@@ -21,7 +21,7 @@ export default function AddProject() {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const { bearerKey } = useAuth();
+  const { bearerKey, user } = useAuth();
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -50,6 +50,7 @@ export default function AddProject() {
       projectBudget: formData.budget ? parseInt(formData.budget) : 0,
       projectStartDate: formData.startDate,
       projectEndDate: formData.endDate,
+      userId: user, // Kullanıcı adını projeye atayalım
     };
 
     console.log('Gönderilen Veri:', JSON.stringify(projectData));

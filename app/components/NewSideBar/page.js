@@ -64,6 +64,17 @@ export default function NewSidebar() {
                 </Link>
               </li>
               <li className="mb-12 flex items-center justify-between">
+                <Link
+                  href="/bulk-import"
+                  className="hover:text-gray-400 text-lg"
+                >
+                  Toplu Proje İçe Aktar
+                </Link>
+                <Link href="/bulk-import">
+                  <RiArrowRightDoubleFill color="#ffffff" size={26} className="cursor-pointer hover:opacity-80" />
+                </Link>
+              </li>
+              <li className="mb-12 flex items-center justify-between">
                 <Link href="/projects" className="hover:text-gray-400 text-lg">
                   Projelerim
                 </Link>

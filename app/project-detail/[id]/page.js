@@ -75,6 +75,12 @@ export default function ProjectDetail() {
     setLoading(true);
 
     try {
+      // userId'yi koruyarak form verisini hazırla
+      const updateData = {
+        ...formData,
+        userId: project.userId // Orijinal userId'yi koru
+      };
+
       const response = await fetch(
         `https://server.lunaproject.com.tr/projects/${id}`,
         {
@@ -83,7 +89,7 @@ export default function ProjectDetail() {
             Authorization: `Bearer ${bearerKey}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(updateData),
         }
       );
 

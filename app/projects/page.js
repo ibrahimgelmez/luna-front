@@ -28,11 +28,15 @@ export default function Projects() {
         }
         const data = await response.json();
 
+        console.log( "data", data);
+
         // Filter projects to only include those with matching userId
         if (data._embedded && data._embedded.projects) {
           const userProjects = data._embedded.projects.filter(
             (project) => project.userId === user
           );
+          console.log('Kullanıcı Projeleri:', userProjects);
+          console.log('Mevcut Kullanıcı:', user);
           setProjects(userProjects);
         } else {
           setProjects([]);
@@ -42,6 +46,9 @@ export default function Projects() {
         setProjects([]);
       }
     };
+
+    console.log( "projects", projects);
+    
 
     if (bearerKey && user) {
       fetchProjects();
