@@ -219,6 +219,7 @@ export default function AddProject() {
             >
               <option value="">Seçiniz</option>
               <option value="Ar-Ge">Ar-Ge</option>
+              <option value="Yazılım">YAZILIM</option>
               <option value="TÜBİTAK">TÜBİTAK</option>
               <option value="KOSGEB">KOSGEB</option>
               <option value="TEKNOPARK">TEKNOPARK</option>
@@ -244,6 +245,8 @@ export default function AddProject() {
             >
               <option value="">Seçiniz</option>
               <option value="Teknoloji">Teknoloji</option>
+              <option value="Yazılım">Yazılım</option>
+              <option value="Tekstil">Tekstil</option>
               <option value="Eğitim">Eğitim</option>
               <option value="Sağlık">Sağlık</option>
               <option value="Finans">Finans</option>
