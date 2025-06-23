@@ -18,6 +18,7 @@ export default function AddProject() {
     team: '',
     startDate: '',
     endDate: '',
+    completionStatus: 'in_progress',
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -45,7 +46,7 @@ export default function AddProject() {
       projectType: formData.type,
       projectPurpose: formData.purpose,
       projectSector: formData.sector,
-      projectStatus: 'Devam Ediyor',
+      projectStatus: formData.completionStatus === 'completed' ? 'completed' : 'in_progress',
       projectTeam: teamArray,
       projectBudget: formData.budget ? parseInt(formData.budget) : 0,
       projectStartDate: formData.startDate,
@@ -89,6 +90,7 @@ export default function AddProject() {
         team: '',
         startDate: '',
         endDate: '',
+        completionStatus: 'in_progress',
       });
 
       setTimeout(() => {
@@ -336,6 +338,8 @@ export default function AddProject() {
               required
             />
           </div>
+
+        
 
           {/* Submit Button */}
           <button
