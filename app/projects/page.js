@@ -37,6 +37,9 @@ export default function Projects() {
           );
           console.log('Kullanıcı Projeleri:', userProjects);
           console.log('Mevcut Kullanıcı:', user);
+          if (userProjects.length > 0) {
+            console.log('İlk proje tarih formatı:', userProjects[0].projectStartDate, userProjects[0].projectEndDate);
+          }
           setProjects(userProjects);
         } else {
           setProjects([]);
@@ -55,8 +58,26 @@ export default function Projects() {
     }
   }, [bearerKey, user]);
 
+  console.log("projects",projects);
+  
+
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    try {
+      // DB'den gelen tarihi olduğu gibi göster, sadece YYYY-MM-DD kısmını al
+      const dateOnly = dateString.split('T')[0]; // 2024-01-15T00:00:00 -> 2024-01-15
+      
+      // DD.MM.YYYY formatına çevir
+      const [year, month, day] = dateOnly.split('-');
+      return `${day}.${month}.${year}`;
+    } catch (error) {
+      console.error('Tarih formatlama hatası:', error, dateString);
+      return dateString;
+    }
   };
 
   const getProjectProgress = (project) => {
@@ -72,7 +93,9 @@ export default function Projects() {
     return [...projects].sort((a, b) => {
       if (sortOption === 'date') {
         // Bitiş tarihine göre sıralama (yakın tarihe göre)
-        return new Date(a.projectEndDate) - new Date(b.projectEndDate);
+        const dateA = a.projectEndDate.includes('T') ? new Date(a.projectEndDate) : new Date(a.projectEndDate + 'T00:00:00');
+        const dateB = b.projectEndDate.includes('T') ? new Date(b.projectEndDate) : new Date(b.projectEndDate + 'T00:00:00');
+        return dateA - dateB;
       } else if (sortOption === 'progress') {
         // Bitme yüzdesine göre sıralama (yüksekten düşüğe)
         return getProjectProgress(b) - getProjectProgress(a);
@@ -118,10 +141,10 @@ export default function Projects() {
                   {project.projectName}
                 </span>
                 <span>
-                  {new Date(project.projectStartDate).toLocaleDateString()}
+                  {formatDate(project.projectStartDate)}
                 </span>
                 <span>
-                  {new Date(project.projectEndDate).toLocaleDateString()}
+                  {formatDate(project.projectEndDate)}
                 </span>
                 <span>{project.projectType}</span>
                 <span className="flex justify-center">

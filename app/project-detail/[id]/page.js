@@ -11,9 +11,24 @@ export default function ProjectDetail() {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { bearerKey } = useAuth();
+  const { bearerKey , user } = useAuth();
   const { id } = useParams();
   const router = useRouter();
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    try {
+      // DB'den gelen tarihi olduğu gibi göster, sadece YYYY-MM-DD kısmını al
+      const dateOnly = dateString.split('T')[0]; // 2024-01-15T00:00:00 -> 2024-01-15
+      
+      // DD.MM.YYYY formatına çevir
+      const [year, month, day] = dateOnly.split('-');
+      return `${day}.${month}.${year}`;
+    } catch (error) {
+      console.error('Tarih formatlama hatası:', error, dateString);
+      return dateString;
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -33,8 +48,18 @@ export default function ProjectDetail() {
             throw new Error('Proje yüklenemedi');
           }
           const data = await response.json();
-          setProject(data);
-          setFormData(data); // Formda kullanılacak veriyi ayarla
+          console.log('🔍 Initial data loaded:', data);
+          console.log('🔍 Initial userId:', data.userId);
+          console.log('🔍 Current logged user:', user);
+          
+          // userId'yi giriş yapmış kullanıcı olarak ayarla
+          const projectWithUser = {
+            ...data,
+            userId: user
+          };
+          
+          setProject(projectWithUser);
+          setFormData(projectWithUser); // Formda kullanılacak veriyi ayarla
         } catch (error) {
           console.error('Proje yüklenirken hata oluştu:', error);
           toast.error('Proje yüklenirken hata oluştu');
@@ -46,13 +71,21 @@ export default function ProjectDetail() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: value,
+      userId: user // Giriş yapmış kullanıcıyı her zaman koru
+    }));
   };
 
   const handleTeamChange = (e) => {
     // Ekip üyelerini virgülle ayrılmış string olarak alıp array'e çeviriyoruz
     const teamMembers = e.target.value.split(',').map(member => member.trim());
-    setFormData(prev => ({ ...prev, projectTeam: teamMembers }));
+    setFormData(prev => ({ 
+      ...prev, 
+      projectTeam: teamMembers,
+      userId: user // Giriş yapmış kullanıcıyı her zaman koru
+    }));
   };
 
   const handleCheckboxChange = (e) => {
@@ -62,24 +95,38 @@ export default function ProjectDetail() {
     if (name === 'projectStatusCheckbox') {
       setFormData(prev => ({ 
         ...prev, 
-        projectStatus: checked ? 'completed' : 'Devam Ediyor' 
+        projectStatus: checked ? 'completed' : 'Devam Ediyor',
+        userId: user // Giriş yapmış kullanıcıyı her zaman koru
       }));
       return;
     }
     
-    setFormData(prev => ({ ...prev, [name]: checked }));
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: checked,
+      userId: user // Giriş yapmış kullanıcıyı her zaman koru
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
+    console.log('🚨 SUBMIT START - Debug Info:');
+    console.log('🔍 Current user (logged in):', user);
+    console.log('🔍 Current project.userId:', project?.userId);
+    console.log('🔍 Current formData.userId:', formData?.userId);
+    console.log('🔍 Current formData:', formData);
+
     try {
-      // userId'yi koruyarak form verisini hazırla
+      // userId'yi giriş yapmış kullanıcı olarak ayarla
       const updateData = {
         ...formData,
-        userId: project.userId // Orijinal userId'yi koru
+        userId: user // Giriş yapmış kullanıcıyı userId olarak koru
       };
+
+      console.log('🔍 Prepared updateData:', updateData);
+      console.log('🔍 UpdateData.userId:', updateData.userId);
 
       const response = await fetch(
         `https://server.lunaproject.com.tr/projects/${id}`,
@@ -98,10 +145,23 @@ export default function ProjectDetail() {
       }
 
       const updatedProject = await response.json();
-      setProject(updatedProject);
-      setFormData(updatedProject);
+      console.log('🔍 Server response:', updatedProject);
+      console.log('🔍 Server response userId:', updatedProject.userId);
+      
+      // GÜVENLIK ÖNLEMİ: Sunucu userId'yi kaybederse, giriş yapmış kullanıcıyı koru
+      const safeUpdatedProject = {
+        ...updatedProject,
+        userId: user // Her durumda giriş yapmış kullanıcıyı koru
+      };
+      
+      console.log('🔍 Safe project with preserved userId:', safeUpdatedProject);
+      
+      setProject(safeUpdatedProject);
+      setFormData(safeUpdatedProject);
       setEditMode(false);
       toast.success('Proje başarıyla güncellendi');
+      
+      console.log('🔍 After update - new project state will be:', safeUpdatedProject);
     } catch (error) {
       console.error('Proje güncellenirken hata oluştu:', error);
       toast.error(`Proje güncellenirken hata oluştu: ${error.message}`);
@@ -111,7 +171,12 @@ export default function ProjectDetail() {
   };
 
   const handleCancel = () => {
-    setFormData(project); // Form verilerini orijinal proje verileriyle sıfırla
+    // Form verilerini orijinal proje verileriyle sıfırla ama userId'yi giriş yapmış kullanıcı yap
+    const formDataWithUserId = {
+      ...project,
+      userId: user // Giriş yapmış kullanıcıyı koru
+    };
+    setFormData(formDataWithUserId);
     setEditMode(false);
   };
 
@@ -156,6 +221,9 @@ export default function ProjectDetail() {
       </div>
     );
   }
+
+  console.log("project DETAİLS",project);
+  
 
   return (
     <div className="p-4 pt-16 bg-[#EDF7FA] px-32 min-h-screen">
@@ -455,14 +523,14 @@ export default function ProjectDetail() {
                 Başlangıç Tarihi
               </h2>
               <p className="text-[#0000cd]">
-                {new Date(project.projectStartDate).toLocaleDateString()}
+                {formatDate(project.projectStartDate)}
               </p>
 
               <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
                 Bitiş Tarihi
               </h2>
               <p className="text-[#0000cd]">
-                {new Date(project.projectEndDate).toLocaleDateString()}
+                {formatDate(project.projectEndDate)}
               </p>
 
               <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
@@ -546,7 +614,7 @@ export default function ProjectDetail() {
                 <h3 className="font-semibold text-[#0000cd]">Ek Süre Tarihi</h3>
                 <p className="text-[#0000cd]">
                   {project.ekSureTarihi 
-                    ? new Date(project.ekSureTarihi).toLocaleDateString() 
+                    ? formatDate(project.ekSureTarihi) 
                     : 'Belirlenmedi'}
                 </p>
               </div>

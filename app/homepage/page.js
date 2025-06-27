@@ -135,7 +135,7 @@ const Homepage = () => {
         
         // Sadece kullanıcıya ait devam eden projeleri filtreleme
         const ongoingProjects = data._embedded.projects.filter(
-          (project) => project.projectStatus === 'Devam Ediyor' && project.userId === user
+          (project) => project.projectStatus === 'in_progress' && project.userId === user
         );
         
         // Tamamlanmış projeleri filtreleme

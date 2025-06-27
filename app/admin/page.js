@@ -166,21 +166,21 @@ export default function Admin() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0000cd]">
       <div className="flex flex-col items-center space-y-4">
-        <div className="flex space-x-4">
-          <button
-            onClick={() => setShowAddPopup(true)}
-            className="bg-[#eaf1f7] text-[#00186e] text-3xl px-16 py-12 rounded-lg hover:bg-blue-600"
-          >
-            +
-          </button>
-          <button
-            onClick={() => {
-              fetchCompanies();
-              setShowListPopup(true);
-            }}
-            className="bg-[#eaf1f7] text-[#00186e] text-3xl px-16 py-12 rounded-lg hover:bg-red-600"
-          >
-            -
+      <div className="flex space-x-4">
+        <button
+          onClick={() => setShowAddPopup(true)}
+          className="bg-[#eaf1f7] text-[#00186e] text-3xl px-16 py-12 rounded-lg hover:bg-blue-600"
+        >
+          +
+        </button>
+        <button
+          onClick={() => {
+            fetchCompanies();
+            setShowListPopup(true);
+          }}
+          className="bg-[#eaf1f7] text-[#00186e] text-3xl px-16 py-12 rounded-lg hover:bg-red-600"
+        >
+          -
           </button>
         </div>
         <button
