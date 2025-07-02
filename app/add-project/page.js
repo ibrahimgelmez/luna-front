@@ -30,6 +30,38 @@ export default function AddProject() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Tarih girişi için otomatik formatlamayı yöneten fonksiyon
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    let formattedValue = value;
+
+    // Sadece rakam ve slash karakterlerine izin ver
+    formattedValue = formattedValue.replace(/[^\d/]/g, '');
+
+    // Otomatik slash ekleme
+    if (formattedValue.length === 2 && !formattedValue.includes('/')) {
+      formattedValue += '/';
+    } else if (formattedValue.length === 5 && formattedValue.split('/').length === 2) {
+      formattedValue += '/';
+    }
+
+    // Maksimum uzunluk kontrolü (DD/MM/YYYY = 10 karakter)
+    if (formattedValue.length <= 10) {
+      setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    }
+  };
+
+  // Tarih formatını DD/MM/YYYY'den YYYY-MM-DD'ye çeviren fonksiyon
+  const formatDateForAPI = (dateString) => {
+    if (!dateString) return '';
+    const parts = dateString.split('/');
+    if (parts.length === 3) {
+      const [day, month, year] = parts;
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+    return dateString;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -49,8 +81,8 @@ export default function AddProject() {
       projectStatus: formData.completionStatus === 'completed' ? 'completed' : 'in_progress',
       projectTeam: teamArray,
       projectBudget: formData.budget ? parseInt(formData.budget) : 0,
-      projectStartDate: formData.startDate,
-      projectEndDate: formData.endDate,
+      projectStartDate: formatDateForAPI(formData.startDate),
+      projectEndDate: formData.endDate ? formatDateForAPI(formData.endDate) : '',
       userId: user, // Kullanıcı adını projeye atayalım
     };
 
@@ -152,7 +184,7 @@ export default function AddProject() {
               htmlFor="stbCode"
               className="block text-blue-900 font-semibold mb-2"
             >
-              STB Kodu
+              STB Kodu (Opsiyonel)
             </label>
             <input
               type="text"
@@ -161,7 +193,6 @@ export default function AddProject() {
               value={formData.stbCode}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-900 text-black"
-              required
             />
           </div>
 
@@ -310,12 +341,16 @@ export default function AddProject() {
               Başlangıç Tarihi
             </label>
             <input
-              type="date"
+              type="text"
               id="startDate"
               name="startDate"
               value={formData.startDate}
-              onChange={handleChange}
+              onChange={handleDateChange}
               className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-900 text-black"
+              placeholder="GG/AA/YYYY"
+              pattern="^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}$"
+              title="Lütfen GG/AA/YYYY formatında tarih girin (örn: 15/03/2024)"
+              maxLength="10"
               required
             />
           </div>
@@ -326,20 +361,21 @@ export default function AddProject() {
               htmlFor="endDate"
               className="block text-blue-900 font-semibold mb-2"
             >
-              Bitiş Tarihi
+              Bitiş Tarihi (Opsiyonel)
             </label>
             <input
-              type="date"
+              type="text"
               id="endDate"
               name="endDate"
               value={formData.endDate}
-              onChange={handleChange}
+              onChange={handleDateChange}
               className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-900 text-black"
-              required
+              placeholder="GG/AA/YYYY"
+              pattern="^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}$"
+              title="Lütfen GG/AA/YYYY formatında tarih girin (örn: 15/03/2024)"
+              maxLength="10"
             />
           </div>
-
-        
 
           {/* Submit Button */}
           <button

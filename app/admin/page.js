@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FaTrash, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Admin() {
   const [showAddPopup, setShowAddPopup] = useState(false);
@@ -159,12 +160,17 @@ export default function Admin() {
     return sortConfig.direction === 'ascending' ? <FaSortUp className="inline ml-1" /> : <FaSortDown className="inline ml-1" />;
   };
 
+  const handleProjectSelect = (project) => {
+    setSelectedProject(project);
+  };
+
   if (user !== 'admin') {
     return null; // Don't render anything if not admin
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0000cd]">
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="flex flex-col items-center space-y-4">
       <div className="flex space-x-4">
         <button
@@ -317,22 +323,22 @@ export default function Admin() {
                       <tr 
                         key={project.id} 
                         className="hover:bg-gray-100 cursor-pointer"
-                        onClick={() => setSelectedProject(project)}
+                        onClick={() => handleProjectSelect(project)}
                       >
                         <td className="py-2 px-4 border-b">{project.projectName}</td>
                         <td className="py-2 px-4 border-b">{project.userId}</td>
                         <td className="py-2 px-4 border-b">
                           {project.projectStartDate 
-                            ? new Date(project.projectStartDate).toLocaleDateString() 
+                            ? new Date(project.projectStartDate).toLocaleDateString('tr-TR') 
                             : project.startDate 
-                              ? new Date(project.startDate).toLocaleDateString()
+                              ? new Date(project.startDate).toLocaleDateString('tr-TR')
                               : '-'}
                         </td>
                         <td className="py-2 px-4 border-b">
                           {project.projectEndDate 
-                            ? new Date(project.projectEndDate).toLocaleDateString() 
+                            ? new Date(project.projectEndDate).toLocaleDateString('tr-TR') 
                             : project.endDate
-                              ? new Date(project.endDate).toLocaleDateString()
+                              ? new Date(project.endDate).toLocaleDateString('tr-TR')
                               : '-'}
                         </td>
                         <td className="py-2 px-4 border-b">
@@ -365,150 +371,159 @@ export default function Admin() {
       {selectedProject && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[80%] max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl text-black font-bold mb-4">Proje Detayı: {selectedProject.projectName}</h2>
+            <h2 className="text-xl text-black font-bold mb-4">
+              Proje Detayı: {selectedProject.projectName}
+            </h2>
             
+            {/* Detay Görünümü */}
             <div className="bg-white rounded-lg">
-              <div className="grid grid-cols-2 gap-6">
-                {/* Sol sütun */}
-                <div>
-                  <h2 className="text-lg font-semibold text-[#0000cd] mb-2">
-                    Proje Adı
-                  </h2>
-                  <p className="text-black">{selectedProject.projectName}</p>
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Sol sütun */}
+                  <div>
+                    <h2 className="text-lg font-semibold text-[#0000cd] mb-2">
+                      Proje Adı
+                    </h2>
+                    <p className="text-black">{selectedProject.projectName}</p>
 
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    Başlangıç Tarihi
-                  </h2>
-                  <p className="text-black">
-                    {selectedProject.projectStartDate ? new Date(selectedProject.projectStartDate).toLocaleDateString() : 
-                     selectedProject.startDate ? new Date(selectedProject.startDate).toLocaleDateString() : 'Belirtilmemiş'}
-                  </p>
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Kullanıcı
+                    </h2>
+                    <p className="text-black">{selectedProject.userId}</p>
 
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    Bitiş Tarihi
-                  </h2>
-                  <p className="text-black">
-                    {selectedProject.projectEndDate ? new Date(selectedProject.projectEndDate).toLocaleDateString() : 
-                     selectedProject.endDate ? new Date(selectedProject.endDate).toLocaleDateString() : 'Belirtilmemiş'}
-                  </p>
-
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    Proje Türü
-                  </h2>
-                  <p className="text-black">{selectedProject.projectType || 'Belirtilmemiş'}</p>
-
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    Proje Durumu
-                  </h2>
-                  <p className={`inline-block px-3 py-1 rounded-full ${
-                    selectedProject.projectStatus === 'completed' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {selectedProject.projectStatus === 'completed' ? 'Tamamlandı' : 'Devam Ediyor'}
-                  </p>
-                </div>
-
-                {/* Sağ sütun */}
-                <div>
-                  <h2 className="text-lg font-semibold text-[#0000cd] mb-2">
-                    Proje Özeti
-                  </h2>
-                  <p className="text-black">{selectedProject.projectSummary || selectedProject.description || 'Belirtilmemiş'}</p>
-
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    Proje Amacı
-                  </h2>
-                  <p className="text-black">{selectedProject.projectPurpose || 'Belirtilmemiş'}</p>
-
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    Sektör
-                  </h2>
-                  <p className="text-black">{selectedProject.projectSector || 'Belirtilmemiş'}</p>
-
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    Proje Ekibi
-                  </h2>
-                  {selectedProject.projectTeam ? (
-                    <ul className="list-disc list-inside text-black">
-                      {Array.isArray(selectedProject.projectTeam) ? 
-                        selectedProject.projectTeam.map((member, index) => (
-                          <li key={index}>{member}</li>
-                        )) : 
-                        <li>{selectedProject.projectTeam}</li>
-                      }
-                    </ul>
-                  ) : (
-                    <p className="text-black">{selectedProject.team || 'Belirtilmemiş'}</p>
-                  )}
-
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    Proje Bütçesi
-                  </h2>
-                  <p className="text-black">
-                    {selectedProject.projectBudget 
-                      ? `${Number(selectedProject.projectBudget).toLocaleString()} ₺` 
-                      : 'Belirtilmemiş'}
-                  </p>
-
-                  {selectedProject.stbCode && (
-                    <>
-                      <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                        STB Kodu
-                      </h2>
-                      <p className="text-black">{selectedProject.stbCode}</p>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {/* Durum Bilgileri */}
-              <div className="mt-8 border-t pt-6 border-gray-200">
-                <h2 className="text-xl font-bold text-[#0000cd] mb-4">Proje Durumu</h2>
-                <div className="grid grid-cols-4 gap-4">
-                  <div className="bg-gray-100 p-3 rounded-lg">
-                    <h3 className="font-semibold text-[#0000cd]">Personel Girişi</h3>
-                    <p className="text-black">{selectedProject.personelGirisi ? 'Evet' : 'Hayır'}</p>
-                  </div>
-                  <div className="bg-gray-100 p-3 rounded-lg">
-                    <h3 className="font-semibold text-[#0000cd]">Faz Yapım Aşaması</h3>
-                    <p className="text-black">{selectedProject.fazYapimAsamasi ? 'Evet' : 'Hayır'}</p>
-                  </div>
-                  <div className="bg-gray-100 p-3 rounded-lg">
-                    <h3 className="font-semibold text-[#0000cd]">Bitirme Talebi</h3>
-                    <p className="text-black">{selectedProject.bitirmeTalebi ? 'Evet' : 'Hayır'}</p>
-                  </div>
-                  <div className="bg-gray-100 p-3 rounded-lg">
-                    <h3 className="font-semibold text-[#0000cd]">Ek Süre Tarihi</h3>
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Başlangıç Tarihi
+                    </h2>
                     <p className="text-black">
-                      {selectedProject.ekSureTarihi 
-                        ? new Date(selectedProject.ekSureTarihi).toLocaleDateString() 
-                        : 'Belirlenmedi'}
+                      {selectedProject.projectStartDate ? new Date(selectedProject.projectStartDate).toLocaleDateString('tr-TR') : 
+                       selectedProject.startDate ? new Date(selectedProject.startDate).toLocaleDateString('tr-TR') : 'Belirtilmemiş'}
+                    </p>
+
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Bitiş Tarihi
+                    </h2>
+                    <p className="text-black">
+                      {selectedProject.projectEndDate ? new Date(selectedProject.projectEndDate).toLocaleDateString('tr-TR') : 
+                       selectedProject.endDate ? new Date(selectedProject.endDate).toLocaleDateString('tr-TR') : 'Belirtilmemiş'}
+                    </p>
+
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Proje Türü
+                    </h2>
+                    <p className="text-black">{selectedProject.projectType || 'Belirtilmemiş'}</p>
+
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Proje Durumu
+                    </h2>
+                    <p className={`inline-block px-3 py-1 rounded-full ${
+                      selectedProject.projectStatus === 'completed' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {selectedProject.projectStatus === 'completed' ? 'Tamamlandı' : 'Devam Ediyor'}
                     </p>
                   </div>
+
+                  {/* Sağ sütun */}
+                  <div>
+                    <h2 className="text-lg font-semibold text-[#0000cd] mb-2">
+                      Proje Özeti
+                    </h2>
+                    <p className="text-black">{selectedProject.projectSummary || selectedProject.description || 'Belirtilmemiş'}</p>
+
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Proje Amacı
+                    </h2>
+                    <p className="text-black">{selectedProject.projectPurpose || 'Belirtilmemiş'}</p>
+
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Sektör
+                    </h2>
+                    <p className="text-black">{selectedProject.projectSector || 'Belirtilmemiş'}</p>
+
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Proje Ekibi
+                    </h2>
+                    {selectedProject.projectTeam ? (
+                      <ul className="list-disc list-inside text-black">
+                        {Array.isArray(selectedProject.projectTeam) ? 
+                          selectedProject.projectTeam.map((member, index) => (
+                            <li key={index}>{member}</li>
+                          )) : 
+                          <li>{selectedProject.projectTeam}</li>
+                        }
+                      </ul>
+                    ) : (
+                      <p className="text-black">{selectedProject.team || 'Belirtilmemiş'}</p>
+                    )}
+
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      Proje Bütçesi
+                    </h2>
+                    <p className="text-black">
+                      {selectedProject.projectBudget 
+                        ? `${Number(selectedProject.projectBudget).toLocaleString()} ₺` 
+                        : 'Belirtilmemiş'}
+                    </p>
+
+                    <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                      STB Kodu
+                    </h2>
+                    <p className="text-black">{selectedProject.stbCode || 'Belirtilmemiş'}</p>
+                  </div>
+                </div>
+
+                {/* Durum Bilgileri */}
+                <div className="mt-8 border-t pt-6 border-gray-200">
+                  <h2 className="text-xl font-bold text-[#0000cd] mb-4">Proje Durumu</h2>
+                  <div className="grid grid-cols-4 gap-4">
+                    <div className="bg-gray-100 p-3 rounded-lg">
+                      <h3 className="font-semibold text-[#0000cd]">Personel Girişi</h3>
+                      <p className="text-black">{selectedProject.personelGirisi ? 'Evet' : 'Hayır'}</p>
+                    </div>
+                    <div className="bg-gray-100 p-3 rounded-lg">
+                      <h3 className="font-semibold text-[#0000cd]">Faz Yapım Aşaması</h3>
+                      <p className="text-black">{selectedProject.fazYapimAsamasi ? 'Evet' : 'Hayır'}</p>
+                    </div>
+                    <div className="bg-gray-100 p-3 rounded-lg">
+                      <h3 className="font-semibold text-[#0000cd]">Bitirme Talebi</h3>
+                      <p className="text-black">{selectedProject.bitirmeTalebi ? 'Evet' : 'Hayır'}</p>
+                    </div>
+                    <div className="bg-gray-100 p-3 rounded-lg">
+                      <h3 className="font-semibold text-[#0000cd]">Ek Süre Tarihi</h3>
+                      <p className="text-black">
+                        {selectedProject.ekSureTarihi 
+                          ? new Date(selectedProject.ekSureTarihi).toLocaleDateString('tr-TR') 
+                          : 'Belirlenmedi'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 border-t pt-6 border-gray-200">
+                  <h2 className="text-xl font-bold text-[#0000cd] mb-4">İlerleme Bilgisi</h2>
+                  <div className="w-full bg-gray-200 rounded-full h-5">
+                    <div 
+                      className="bg-[#0000cd] h-5 rounded-full" 
+                      style={{ width: `${getProgress(selectedProject)}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-black mt-2 text-right font-bold">
+                    {getProgress(selectedProject)}% Tamamlandı
+                  </p>
                 </div>
               </div>
 
-              <div className="mt-8 border-t pt-6 border-gray-200">
-                <h2 className="text-xl font-bold text-[#0000cd] mb-4">İlerleme Bilgisi</h2>
-                <div className="w-full bg-gray-200 rounded-full h-5">
-                  <div 
-                    className="bg-[#0000cd] h-5 rounded-full" 
-                    style={{ width: `${getProgress(selectedProject)}%` }}
-                  ></div>
-                </div>
-                <p className="text-black mt-2 text-right font-bold">
-                  {getProgress(selectedProject)}%
-                </p>
-              </div>
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                onClick={() => {
+                  setShowProjectsPopup(false);
+                  setSelectedProject(null);
+                }}
+                className="text-red-500 border-2 border-red-500 rounded-lg px-4 py-2 hover:bg-red-50 transition"
+              >
+                Kapat
+              </button>
             </div>
-            
-            <button
-              onClick={() => setSelectedProject(null)}
-              className="mt-8 text-red-500 border-2 border-red-500 rounded-lg px-4 py-2"
-            >
-              Kapat
-            </button>
           </div>
         </div>
       )}

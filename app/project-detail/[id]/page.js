@@ -273,7 +273,7 @@ export default function ProjectDetail() {
 
                 <div className="mb-4">
                   <label className="block text-lg font-semibold text-[#0000cd] mb-2">
-                    Bitiş Tarihi
+                    Bitiş Tarihi (Opsiyonel)
                   </label>
                   <input
                     type="date"
@@ -281,7 +281,6 @@ export default function ProjectDetail() {
                     value={formData.projectEndDate ? formData.projectEndDate.split('T')[0] : ''}
                     onChange={handleChange}
                     className="w-full p-2 border border-gray-300 rounded text-black"
-                    required
                   />
                 </div>
 
@@ -410,7 +409,7 @@ export default function ProjectDetail() {
 
                 <div className="mb-4">
                   <label className="block text-lg font-semibold text-[#0000cd] mb-2">
-                    STB Kodu
+                    STB Kodu (Opsiyonel)
                   </label>
                   <input
                     type="text"
@@ -580,14 +579,10 @@ export default function ProjectDetail() {
                 {project.projectBudget.toLocaleString()} ₺
               </p>
 
-              {project.stbCode && (
-                <>
-                  <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
-                    STB Kodu
-                  </h2>
-                  <p className="text-[#0000cd]">{project.stbCode}</p>
-                </>
-              )}
+              <h2 className="text-lg font-semibold text-[#0000cd] mt-4 mb-2">
+                STB Kodu
+              </h2>
+              <p className="text-[#0000cd]">{project.stbCode || 'Belirtilmemiş'}</p>
             </div>
           </div>
 
