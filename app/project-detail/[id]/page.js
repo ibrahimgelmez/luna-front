@@ -297,6 +297,7 @@ export default function ProjectDetail() {
                   >
                     <option value="Ar-Ge">Ar-Ge</option>
                     <option value="TÜBİTAK">TÜBİTAK</option>
+                    <option value="Yazılım">Yazılım</option>
                     <option value="KOSGEB">KOSGEB</option>
                     <option value="TEKNOPARK">TEKNOPARK</option>
                     <option value="Web Uygulaması">Web Uygulaması</option>
@@ -373,6 +374,8 @@ export default function ProjectDetail() {
                   >
                     <option value="Teknoloji">Teknoloji</option>
                     <option value="Eğitim">Eğitim</option>
+                    <option value="Yazılım">Yazılım</option>
+                    <option value="Tekstil">Tekstil</option>
                     <option value="Sağlık">Sağlık</option>
                     <option value="Finans">Finans</option>
                     <option value="E-Ticaret">E-Ticaret</option>
